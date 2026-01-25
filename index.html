@@ -905,6 +905,15 @@
       height: 22px;
     }
 
+    .modal-section .section-icon-img {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      opacity: 0.92;
+      filter: saturate(0.8);
+    }
+
     .modal-section ul {
       margin: 0;
       padding-left: 18px;
@@ -2807,6 +2816,8 @@
       var lastTrigger = null;
       var initialized = new Set();
 
+      replaceSectionIcons();
+
       var exportPdfButtonBottom = document.getElementById('export-pdf-bottom');
       if (exportPdfButtonBottom) {
         exportPdfButtonBottom.addEventListener('click', function () {
@@ -3114,6 +3125,72 @@
           });
 
           root.appendChild(sectionEl);
+        });
+      }
+
+      function replaceSectionIcons() {
+        var iconMap = {
+          statusquo: 'assets/statusquo.png',
+          flaschenhals: 'assets/flaschenhals.png',
+          loesung: 'assets/l%C3%B6sung.png',
+          impact: 'assets/impact.png'
+        };
+
+        function normalizeText(text) {
+          return (text || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+        }
+
+        function resolveKey(label) {
+          if (!label) {
+            return null;
+          }
+
+          if (label.indexOf('status quo') !== -1) {
+            return 'statusquo';
+          }
+
+          if (label.indexOf('flaschenhals') !== -1) {
+            return 'flaschenhals';
+          }
+
+          if (label.indexOf('exzellenz-losung') !== -1 || label.indexOf('exzellenz loesung') !== -1 || label.indexOf('exzellenz-lösung') !== -1) {
+            return 'loesung';
+          }
+
+          if (label.indexOf('impact') !== -1) {
+            return 'impact';
+          }
+
+          return null;
+        }
+
+        document.querySelectorAll('.modal-section h4').forEach(function (heading) {
+          if (heading.querySelector('.section-icon-img')) {
+            return;
+          }
+
+          var label = normalizeText(heading.textContent);
+          var key = resolveKey(label);
+          if (!key || !iconMap[key]) {
+            return;
+          }
+
+          var existingSvg = heading.querySelector('svg');
+          if (existingSvg) {
+            existingSvg.remove();
+          }
+
+          var img = document.createElement('img');
+          img.className = 'section-icon-img';
+          img.src = iconMap[key];
+          img.alt = '';
+          img.setAttribute('aria-hidden', 'true');
+          heading.insertBefore(img, heading.firstChild);
         });
       }
 
