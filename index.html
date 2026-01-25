@@ -2935,6 +2935,14 @@
           state.index = Math.max(0, Math.min(index, maxIndex));
           track.style.transform = 'translateX(' + state.index * -100 + '%)';
 
+          var scrollContainer = modal.querySelector('.modal-body--bar') || modal.querySelector('.modal-body');
+          if (scrollContainer) {
+            scrollContainer.scrollTop = 0;
+            if (typeof scrollContainer.scrollTo === 'function') {
+              scrollContainer.scrollTo(0, 0);
+            }
+          }
+
           var activeSlide = slides[state.index];
           if (activeSlide) {
             var nextKicker = activeSlide.getAttribute('data-modal-kicker');
