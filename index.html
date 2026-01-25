@@ -993,14 +993,92 @@
         width: min(640px, 94vw);
       }
 
+      .modal-header {
+        padding: 18px 20px 20px;
+        gap: 14px;
+      }
+
+      .modal-header .modal-close {
+        top: 12px;
+        right: 12px;
+        padding: 6px 8px;
+        font-size: 0.68rem;
+      }
+
+      .modal-header p {
+        font-size: 0.62rem;
+        letter-spacing: 0.22em;
+      }
+
+      .modal-header h3 {
+        font-size: 1.05rem;
+        letter-spacing: 0.12em;
+        line-height: 1.15;
+        overflow: visible;
+        text-overflow: clip;
+        white-space: normal;
+      }
+
+      .modal-header .modal-slider-controls {
+        margin-top: 14px;
+      }
+
+      .modal-header .modal-slider-buttons {
+        gap: 12px;
+      }
+
+      .modal-card {
+        max-height: 94svh;
+        border-radius: 20px;
+      }
+
+      .modal-body,
+      .modal-body--bar {
+        padding: 20px;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .modal-section,
+      .dashboard-module,
+      .chart-card {
+        max-width: 100%;
+        overflow: hidden;
+      }
+
+      .modal-body img {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .modal-body svg {
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      .modal-header .modal-slider-button,
+      .modal-header .bar-slider-button {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+      }
+
+      .modal-header .modal-slider-dots,
+      .modal-header .bar-slider-dots {
+        gap: 8px;
+      }
+
+      .modal-header .modal-dot,
+      .modal-header .bar-dot {
+        width: 9px;
+        height: 9px;
+      }
+
       .modal-body {
-        padding: 28px;
         grid-template-columns: 1fr;
       }
 
       .modal-body--bar {
         max-height: none;
-        padding: 28px;
       }
 
       .bar-process-grid {
