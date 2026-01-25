@@ -1,0 +1,3047 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimierungsprozesse im Hotelbetrieb</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@500;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: linear-gradient(135deg, #f6faf7 0%, #c7dfd0 45%, #b2d0c0 100%);
+      --surface: rgba(255, 255, 255, 0.9);
+      --outline: rgba(16, 35, 29, 0.12);
+      --text: #000000;
+      --dashboard-tile-bg: #a8c7af;
+      --dashboard-tile-bg-hover: #9bb7a1;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Work Sans", sans-serif;
+      padding: 48px 0 80px;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: "Montserrat", sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+    }
+
+    h2 {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+    }
+
+    .deck {
+      width: min(960px, 92vw);
+      background: var(--surface);
+      border-radius: 32px;
+      box-shadow: 0 40px 110px rgba(16, 35, 29, 0.15);
+      border: 1px solid var(--outline);
+      padding: 56px 64px;
+      display: grid;
+      gap: 56px;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      gap: 36px;
+    }
+
+    .brand-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 6px;
+    }
+
+    .brand-copy h1 {
+      margin: 0;
+    }
+
+    .brand-subtitle {
+      margin: 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: rgba(16, 35, 29, 0.72);
+    }
+
+    .brand-author {
+      margin: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 500;
+      color: rgba(16, 35, 29, 0.62);
+    }
+
+    .header-actions {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .export-button {
+      border-radius: 999px;
+      border: 1px solid rgba(16, 35, 29, 0.5);
+      background: rgba(255, 255, 255, 0.85);
+      padding: 10px 18px;
+      font-family: "Montserrat", sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .export-button:hover,
+    .export-button:focus-visible {
+      background: rgba(16, 35, 29, 0.05);
+      outline: none;
+    }
+
+    .brand-logo {
+      width: 120px;
+      height: auto;
+    }
+
+    main {
+      display: grid;
+      gap: 40px;
+    }
+
+    section {
+      padding: 32px;
+      border-radius: 24px;
+      border: 1px solid var(--outline);
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    .section-highlight {
+      cursor: pointer;
+      transition: box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      background: var(--dashboard-tile-bg);
+    }
+
+    .section-highlight:hover,
+    .section-highlight:focus-visible {
+      background: var(--dashboard-tile-bg-hover);
+      border-color: rgba(31, 76, 69, 0.3);
+      box-shadow: 0 30px 70px rgba(16, 35, 29, 0.18);
+      outline: none;
+    }
+
+    .dashboard-module {
+      font-family: "Montserrat", sans-serif;
+      padding: 40px;
+      border-radius: 28px;
+      border: 1px solid rgba(16, 35, 29, 0.16);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(234, 244, 237, 0.65));
+      box-shadow: 0 34px 90px rgba(16, 35, 29, 0.18);
+      display: grid;
+      gap: 32px;
+    }
+
+    .dashboard-header h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .dashboard-header p {
+      margin: 12px 0 0;
+      max-width: 720px;
+      font-size: 1rem;
+      color: rgba(16, 35, 29, 0.72);
+      letter-spacing: 0.04em;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      align-items: stretch;
+    }
+
+    .dashboard-grid--single {
+      grid-template-columns: 1fr;
+    }
+
+    .chart-card {
+      padding: 28px 30px;
+      border-radius: 22px;
+      border: 1px solid rgba(16, 35, 29, 0.14);
+      background: #ffffff;
+      display: grid;
+      gap: 20px;
+      box-shadow: 0 18px 48px rgba(16, 35, 29, 0.12);
+    }
+
+    .causal-timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      padding: 10px 10px 10px 56px;
+      align-items: start;
+    }
+
+    .causal-timeline::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 28px;
+      width: 2px;
+      background: rgba(16, 35, 29, 0.14);
+      z-index: 0;
+    }
+
+    .causal-step {
+      position: relative;
+      display: grid;
+      justify-items: start;
+      text-align: left;
+      gap: 6px;
+      padding-top: 0;
+      z-index: 1;
+      min-width: 0;
+    }
+
+    .causal-step::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: -28px;
+      transform: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid #1f4c45;
+      box-shadow: 0 8px 18px rgba(16, 35, 29, 0.14);
+    }
+
+    .causal-title {
+      margin: 0;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(16, 35, 29, 0.86);
+      line-height: 1.15;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+
+    .causal-step p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: rgba(16, 35, 29, 0.7);
+      line-height: 1.3;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+
+    @media (max-width: 980px) {
+      .causal-timeline {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .causal-timeline {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .poc-compare {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .poc-panel {
+      border-radius: 18px;
+      border: 1px solid rgba(16, 35, 29, 0.14);
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .poc-panel--before {
+      background: rgba(184, 85, 74, 0.08);
+      border-color: rgba(184, 85, 74, 0.28);
+    }
+
+    .poc-panel--after {
+      background: rgba(31, 76, 69, 0.08);
+      border-color: rgba(31, 76, 69, 0.24);
+    }
+
+    .poc-panel-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .poc-panel-header h5 {
+      margin: 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .poc-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(16, 35, 29, 0.18);
+      background: rgba(255, 255, 255, 0.65);
+      color: rgba(16, 35, 29, 0.75);
+    }
+
+    .poc-flow {
+      display: grid;
+      gap: 10px;
+    }
+
+    .poc-step {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 10px;
+      align-items: start;
+      font-size: 0.9rem;
+      color: rgba(16, 35, 29, 0.78);
+    }
+
+    .poc-step-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 1px solid rgba(16, 35, 29, 0.16);
+      background: rgba(255, 255, 255, 0.65);
+      font-weight: 700;
+      color: rgba(16, 35, 29, 0.7);
+      line-height: 1;
+    }
+
+    .poc-kpis {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .poc-kpi {
+      border-radius: 16px;
+      border: 1px solid rgba(16, 35, 29, 0.14);
+      background: rgba(255, 255, 255, 0.75);
+      padding: 12px 14px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .poc-kpi strong {
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .poc-kpi span {
+      font-size: 0.84rem;
+      color: rgba(16, 35, 29, 0.7);
+    }
+
+    .chart-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chart-header h3 {
+      margin: 0;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .chart-header p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: rgba(16, 35, 29, 0.68);
+      letter-spacing: 0.04em;
+    }
+
+    .kpi-gauges {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      align-items: start;
+    }
+
+    .kpi-gauge {
+      border-radius: 18px;
+      border: 1px solid rgba(16, 35, 29, 0.12);
+      background: rgba(246, 250, 247, 0.85);
+      padding: 16px 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .kpi-gauge h4 {
+      margin: 0;
+      font-size: 0.86rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .kpi-gauge p {
+      margin: 0;
+      font-size: 0.86rem;
+      color: rgba(16, 35, 29, 0.72);
+    }
+
+    .kpi-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(16, 35, 29, 0.12);
+      overflow: hidden;
+    }
+
+    .kpi-bar > span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: rgba(31, 76, 69, 0.92);
+    }
+
+    .chart-legend {
+      display: inline-flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      letter-spacing: 0.02em;
+      color: rgba(16, 35, 29, 0.7);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+    }
+
+    .legend-swatch.baseline {
+      background: #b8554a;
+      border-color: rgba(88, 30, 24, 0.4);
+    }
+
+    .legend-swatch.optimized {
+      background: #1f4c45;
+      border-color: rgba(13, 35, 30, 0.4);
+    }
+
+    .chart-canvas svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+    }
+
+    .modal[aria-hidden="false"] {
+      display: flex;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 17, 15, 0.68);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-card {
+      position: relative;
+      z-index: 1;
+      margin: auto;
+      width: min(880px, 94vw);
+      max-height: 92vh;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 48px 110px rgba(8, 17, 15, 0.45);
+      background: #ffffff;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .modal-header {
+      padding: 28px 36px;
+      background: #0f1f19;
+      color: #f5f5f5;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .modal-header--bar {
+      position: relative;
+      padding-top: 34px;
+    }
+
+    .modal-header .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+
+    .modal-header .modal-close svg {
+      color: #ffffff;
+      width: 13px;
+      height: 13px;
+    }
+
+    .modal-header .bar-slider-controls {
+      margin-top: 28px;
+      justify-content: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .modal-header .bar-slider-buttons {
+      width: 100%;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .modal-header .bar-slider-dots {
+      justify-content: center;
+      flex: 0 0 auto;
+    }
+
+    .modal-header .bar-slider-button {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(245, 245, 245, 0.28);
+      color: #ffffff;
+    }
+
+    .modal-header .bar-slider-button:hover,
+    .modal-header .bar-slider-button:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(245, 245, 245, 0.38);
+    }
+
+    .modal-header .bar-dot {
+      border-color: rgba(245, 245, 245, 0.32);
+      background: rgba(245, 245, 245, 0.16);
+    }
+
+    .modal-header .bar-dot[aria-current="true"] {
+      background: rgba(255, 255, 255, 0.92);
+      border-color: rgba(255, 255, 255, 0.92);
+    }
+
+    .modal-header .modal-slider-controls {
+      margin-top: 28px;
+      justify-content: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .modal-header .modal-slider-buttons {
+      width: 100%;
+      justify-content: space-between;
+      gap: 18px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .modal-header .modal-slider-dots {
+      justify-content: center;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-header .modal-slider-button {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(245, 245, 245, 0.28);
+      color: #ffffff;
+    }
+
+    .modal-header .modal-slider-button:hover,
+    .modal-header .modal-slider-button:focus-visible {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(245, 245, 245, 0.38);
+    }
+
+    .modal-header .modal-dot {
+      border-color: rgba(245, 245, 245, 0.32);
+      background: rgba(245, 245, 245, 0.16);
+    }
+
+    .modal-header .modal-dot[aria-current="true"] {
+      background: rgba(255, 255, 255, 0.92);
+      border-color: rgba(255, 255, 255, 0.92);
+    }
+
+    .modal-header h3 {
+      margin: 8px 0 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      line-height: 1.15;
+      min-height: calc(1.15em * 2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .modal-header p {
+      margin: 0;
+      font-size: 0.72rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(245, 245, 245, 0.65);
+    }
+
+    .modal-close {
+      border: 1px solid rgba(245, 245, 245, 0.3);
+      background: transparent;
+      color: inherit;
+      border-radius: 999px;
+      padding: 10px;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus-visible {
+      background: rgba(245, 245, 245, 0.08);
+      color: #ffffff;
+      outline: none;
+    }
+
+    .modal-body {
+      padding: 36px;
+      background: #f6f7f6;
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .modal-body--bar {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-height: 70vh;
+      overflow-y: auto;
+      min-height: 0;
+      padding: 36px;
+    }
+
+    .modal-body--bar::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-body--bar::-webkit-scrollbar-thumb {
+      background: rgba(16, 35, 29, 0.25);
+      border-radius: 999px;
+    }
+
+    .modal-body--bar::-webkit-scrollbar-track {
+      background: rgba(16, 35, 29, 0.08);
+      border-radius: 999px;
+    }
+
+    .segment-label {
+      margin: 0;
+      font-size: 0.75rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(16, 35, 29, 0.6);
+    }
+
+    .bar-process-segment,
+    .bar-dashboard-segment {
+      display: grid;
+      gap: 0;
+    }
+
+    .bar-process-segment > .segment-label,
+    .bar-dashboard-segment > .segment-label {
+      margin-bottom: 20px;
+    }
+
+    .bar-process-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      align-items: start;
+      font-size: 0;
+    }
+
+    .bar-process-grid--two-by-two {
+      grid-template-columns: repeat(2, minmax(240px, 1fr));
+    }
+
+    .bar-process-grid > .modal-section {
+      font-size: 1rem;
+    }
+
+    .bar-process-grid > .modal-section:last-child {
+      grid-column: 1 / -1;
+    }
+
+    .modal-body:not(.modal-body--bar) .bar-slide {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+    }
+
+    .modal-body:not(.modal-body--bar) .bar-slide.bar-slide--stack {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-body:not(.modal-body--bar) .bar-slide.bar-slide--stack > * {
+      grid-column: 1 / -1;
+    }
+
+    .modal-body:not(.modal-body--bar) .bar-slide > :last-child {
+      grid-column: 1 / -1;
+    }
+
+    .bar-slider {
+      position: relative;
+      border-radius: 22px;
+      overflow-x: hidden;
+      overflow-y: visible;
+    }
+
+    .bar-slider-track {
+      display: flex;
+      width: 100%;
+      transform: translateX(0);
+      transition: transform 0.35s ease;
+      align-items: flex-start;
+    }
+
+    .bar-slide {
+      flex: 0 0 100%;
+      min-width: 100%;
+      display: grid;
+      gap: 20px;
+      align-content: start;
+    }
+
+    .bar-slider-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .bar-slider-buttons {
+      display: inline-flex;
+      gap: 10px;
+    }
+
+    .bar-slider-button {
+      border-radius: 999px;
+      border: 1px solid rgba(16, 35, 29, 0.24);
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--text);
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .bar-slider-button:hover,
+    .bar-slider-button:focus-visible {
+      background: rgba(31, 76, 69, 0.08);
+      border-color: rgba(31, 76, 69, 0.28);
+      outline: none;
+    }
+
+    .bar-slider-dots {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 35, 29, 0.24);
+      background: rgba(16, 35, 29, 0.12);
+      cursor: pointer;
+    }
+
+    .bar-dot[aria-current="true"] {
+      background: rgba(31, 76, 69, 0.92);
+      border-color: rgba(31, 76, 69, 0.92);
+    }
+
+    .modal-section {
+      border-radius: 22px;
+      border: 1px solid rgba(16, 35, 29, 0.16);
+      background: #ffffff;
+      padding: 20px;
+      display: grid;
+      gap: 18px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      min-width: 0;
+    }
+
+    .modal-section:nth-child(2) {
+      border-color: rgba(209, 120, 28, 0.45);
+      background: rgba(209, 120, 28, 0.08);
+    }
+
+    .modal-section:nth-child(3) {
+      background: #111b16;
+      color: #ffffff;
+      border-color: rgba(16, 35, 29, 0.6);
+    }
+
+    .modal-section:nth-child(3) h4,
+    .modal-section:nth-child(3) p,
+    .modal-section:nth-child(3) ul,
+    .modal-section:nth-child(3) li {
+      color: inherit;
+    }
+
+    .modal-section:nth-child(4) {
+      border-color: rgba(20, 115, 74, 0.45);
+      background: rgba(20, 115, 74, 0.08);
+    }
+
+    .modal-section h4 {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-section svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .modal-section ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: rgba(16, 35, 29, 0.78);
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .modal-section li {
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+
+    .modal-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 24px 36px 32px;
+      border-top: 1px solid rgba(16, 35, 29, 0.12);
+      font-size: 0.78rem;
+      color: rgba(16, 35, 29, 0.6);
+    }
+
+    .modal-footer button {
+      align-self: flex-start;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 35, 29, 0.5);
+      background: transparent;
+      color: var(--text);
+      padding: 10px 20px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .modal-footer button:hover,
+    .modal-footer button:focus-visible {
+      background: rgba(16, 35, 29, 0.05);
+      outline: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 32px 0 56px;
+      }
+
+      .deck {
+        padding: 40px 28px;
+        gap: 36px;
+      }
+
+      .brand-block {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      section {
+        padding: 24px;
+      }
+
+      .modal-card {
+        width: min(640px, 94vw);
+      }
+
+      .modal-body {
+        padding: 28px;
+        grid-template-columns: 1fr;
+      }
+
+      .modal-body--bar {
+        max-height: none;
+        padding: 28px;
+      }
+
+      .bar-process-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-body:not(.modal-body--bar) .bar-slide {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-footer {
+        padding: 20px 28px 28px;
+      }
+
+      .dashboard-module {
+        padding: 32px 24px;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .poc-compare {
+        grid-template-columns: 1fr;
+      }
+
+      .poc-kpis {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <article class="deck">
+    <header>
+      <div class="brand-block">
+        <img class="brand-logo" src="assets/logo-hotel.webp" alt="Logo des Sander Hotel" />
+        <div class="brand-copy">
+          <h1>Operation &ldquo;Phönix&rdquo;</h1>
+          <p class="brand-subtitle">Konzept zur operativen Sanierung &amp; Plan zur Exzellenz 2026</p>
+          <p class="brand-author">- John Serato -</p>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section
+        id="rezeption"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="rezeption-modal"
+        data-modal-target="rezeption-modal"
+      >
+        <h2>Rezeption</h2>
+      </section>
+
+      <section
+        id="fruehstueck"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="fruehstueck-modal"
+        data-modal-target="fruehstueck-modal"
+      >
+        <h2>Frühstück</h2>
+      </section>
+
+      <section
+        id="bar"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="bar-modal"
+        data-modal-target="bar-modal"
+      >
+        <h2>Bar</h2>
+      </section>
+
+      <section
+        id="technik"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="technik-modal"
+        data-modal-target="technik-modal"
+      >
+        <h2>Technik</h2>
+      </section>
+
+      <section
+        id="housekeeping"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="housekeeping-modal"
+        data-modal-target="housekeeping-modal"
+      >
+        <h2>Housekeeping</h2>
+      </section>
+
+      <section
+        id="logistik"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="logistik-modal"
+        data-modal-target="logistik-modal"
+      >
+        <h2>Logistik</h2>
+      </section>
+
+      <section
+        id="kultur"
+        class="section-highlight"
+        tabindex="0"
+        role="button"
+        aria-controls="kultur-modal"
+        data-modal-target="kultur-modal"
+      >
+        <h2>Kultur</h2>
+      </section>
+    </main>
+
+    <div class="footer-actions">
+      <button class="export-button" type="button" id="export-pdf-bottom">Export als PDF</button>
+    </div>
+  </article>
+
+  <div class="modal" id="bar-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="bar-modal-title">
+      <header class="modal-header modal-header--bar">
+        <div>
+          <p id="bar-modal-kicker" data-modal-kicker>Optimierungsprozesse · Bar</p>
+          <h3 id="bar-modal-title" data-modal-title>BAR / SERVICE – Hybride Transformation &amp; Peak-Performance</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 2" aria-current="false" data-modal-dot="1"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body modal-body--bar">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Bar" data-modal-title="BAR / SERVICE – Hybride Transformation &amp; Peak-Performance">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Status Quo
+                    </h4>
+                    <ul>
+                      <li>Multifunktionale Fläche: Morgens Buffet-Logistik mit Vollautomaten, mittags/abends Handwerk.</li>
+                      <li>Übergang zur Produktions-Bar (Siebträger, Zapfen, Mixologie) ohne nahtlose Übergabe.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Flaschenhals
+                    </h4>
+                    <ul>
+                      <li>Skalierungs-Kollaps in Peak-Zeiten: Effizienz bricht bei hoher Frequenz ein.</li>
+                      <li>Mangelnde Praxis &amp; Know-how verhindern stabile Siebträger- &amp; Mixologie-Prozesse unter Stress.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Exzellenz-Lösung
+                    </h4>
+                    <ul>
+                      <li>Agiles Peak-Management &amp; Cross-Skilling.</li>
+                      <li>Zertifizierung der Buffet-Kräfte zu Junior-Servicekräften via Intensiv-Trainings.</li>
+                      <li>Sander-Produktions-SOPs für Kaffeeparameter, Zapftechnik &amp; Mix-Ratios.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Impact &amp; KPI
+                    </h4>
+                    <ul>
+                      <li>Maximale Durchlaufgeschwindigkeit bei konstanter Premium-Qualität.</li>
+                      <li>ROI: Stoßzeiten-Umsätze sichern – indem wir Abläufe im Team effizienter und handlungssicher machen und dadurch eine konstant hohe Produkt- und Servicequalität liefern. Das Resultat: höhere Gästezufriedenheit.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+              <div class="bar-dashboard-segment">
+                <p class="segment-label">Peak-Performance Modul</p>
+                <article class="dashboard-module">
+                  <div class="dashboard-header">
+                    <h2>Peak-Performance &amp; Hybride Matrix</h2>
+                  </div>
+                  <div class="dashboard-grid">
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Stress-Test · Service-Qualität vs. Gästezahl</h3>
+                        <p>Vergleich der Qualitätskurven ohne Training und mit Sander-SOPs.</p>
+                      </div>
+                      <div class="chart-legend">
+                        <div class="legend-item">
+                          <span class="legend-swatch baseline"></span>
+                          <span>Ohne Schulung</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-swatch optimized"></span>
+                          <span>Mit Sander-SOPs</span>
+                        </div>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 600 320" role="img" aria-labelledby="chart-title chart-desc">
+                          <title id="chart-title">Servicequalität im Stresstest</title>
+                          <desc id="chart-desc">Zwei Kurven zeigen den Qualitätsverlauf ohne Schulung und mit Sander-SOPs über steigende Gästezahlen.</desc>
+                          <defs>
+                            <linearGradient id="grid-gradient" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="520" height="260" fill="url(#grid-gradient)" stroke="rgba(16,35,29,0.1)" />
+                          <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                            <line x1="40" y1="80" x2="560" y2="80" />
+                            <line x1="40" y1="140" x2="560" y2="140" />
+                            <line x1="40" y1="200" x2="560" y2="200" />
+                            <line x1="40" y1="260" x2="560" y2="260" />
+                          </g>
+                          <line x1="40" y1="280" x2="560" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                          <line x1="40" y1="20" x2="40" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                          <path d="M40 80 C160 110 240 170 320 210 C400 240 480 265 560 280" fill="none" stroke="#b8554a" stroke-width="3" stroke-linecap="round" />
+                          <path d="M40 90 C160 95 240 110 320 120 C400 130 480 135 560 138" fill="none" stroke="#1f4c45" stroke-width="3" stroke-linecap="round" />
+                          <g fill="#b8554a">
+                            <circle cx="40" cy="80" r="5" />
+                            <circle cx="240" cy="170" r="5" />
+                            <circle cx="400" cy="240" r="5" />
+                            <circle cx="560" cy="280" r="5" />
+                          </g>
+                          <g fill="#1f4c45">
+                            <circle cx="40" cy="90" r="5" />
+                            <circle cx="240" cy="110" r="5" />
+                            <circle cx="400" cy="130" r="5" />
+                            <circle cx="560" cy="138" r="5" />
+                          </g>
+                          <text x="300" y="310" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Gästezahl pro Zeitslot</text>
+                          <text x="10" y="160" transform="rotate(-90 10 160)" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Service-Qualität</text>
+                          <text x="560" y="297" text-anchor="end" fill="#b8554a" font-size="12">Ohne Schulung</text>
+                          <text x="560" y="154" text-anchor="end" fill="#1f4c45" font-size="12">Mit Sander-SOPs</text>
+                        </svg>
+                      </div>
+                    </article>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Bar" data-modal-title="Standard-Secco: Wareneinsatz runter, Deckungsbeitrag rauf">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Status Quo
+                    </h4>
+                    <ul>
+                      <li>Aktuell wird Premium-Secco sowohl für den Einzelgenuss als auch als Basis für Spritz-Drinks eingesetzt.</li>
+                      <li>Da Aperol &amp; Co. als Geschmacksträger den Charakter des Premium-Seccos im Mix weitgehend überdecken, besteht ein Einsparpotenzial ohne großen Qualitätsverlust.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Flaschenhals
+                    </h4>
+                    <ul>
+                      <li>Wareneinsatz unnötig hoch, weil Premium-Secco auch dort eingesetzt wird, wo er im Spritz geschmacklich kaum differenziert.</li>
+                      <li>Deckungsbeitrag je Spritz sinkt, da der höhere Einkaufspreis nicht in einem entsprechend höheren Mehrwert beim Gast ankommt.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Exzellenz-Lösung
+                    </h4>
+                    <ul>
+                      <li>Umstellung auf einen definierten Standard-Secco als Basis für alle Spritz-Mischgetränke (Aperol, Hugo, Limoncello, Rosato) – inkl. eindeutiger Produktfreigabe.</li>
+                      <li>Einheitliche Rezepturkarte + Mise-en-Place-Standard (Flasche gekühlt, geöffnet/angebrochenes Handling, 1st-in/1st-out) und klare Nachbestelllogik.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Impact &amp; KPI
+                    </h4>
+                    <ul>
+                      <li>ROI: Günstigerer Einkauf (Standard-Secco statt Premium) senkt den Wareneinsatz pro Spritz und erhöht den Deckungsbeitrag – bei stabiler Qualität und gleichbleibendem Verkaufspreis.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+              <div class="bar-dashboard-segment">
+                <p class="segment-label">Peak-Performance Modul</p>
+                <article class="dashboard-module">
+                  <div class="dashboard-header">
+                    <h2>Peak-Performance &amp; Hybride Matrix</h2>
+                  </div>
+                  <div class="dashboard-grid">
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Deckungsbeitrag-Boost · Standard-Secco</h3>
+                        <p>Der Standard-Secco senkt den Wareneinsatz pro Spritz und erhöht den Deckungsbeitrag bei gleichbleibendem Verkaufspreis.</p>
+                      </div>
+                      <div class="chart-legend">
+                        <div class="legend-item">
+                          <span class="legend-swatch baseline"></span>
+                          <span>Premium-Secco im Spritz</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-swatch optimized"></span>
+                          <span>Standard-Secco im Spritz</span>
+                        </div>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 600 320" role="img" aria-labelledby="chart2-title chart2-desc">
+                          <title id="chart2-title">Deckungsbeitrag im Vergleich</title>
+                          <desc id="chart2-desc">Zwei Balken vergleichen den Deckungsbeitrag pro Spritz mit Premium-Secco versus Standard-Secco.</desc>
+                          <defs>
+                            <linearGradient id="grid-gradient-2" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="520" height="260" fill="url(#grid-gradient-2)" stroke="rgba(16,35,29,0.1)" />
+                          <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                            <line x1="40" y1="80" x2="560" y2="80" />
+                            <line x1="40" y1="140" x2="560" y2="140" />
+                            <line x1="40" y1="200" x2="560" y2="200" />
+                            <line x1="40" y1="260" x2="560" y2="260" />
+                          </g>
+                          <line x1="40" y1="280" x2="560" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                          <line x1="40" y1="20" x2="40" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                          <rect x="150" y="110" width="120" height="170" fill="#b8554a" opacity="0.9" rx="10" />
+                          <rect x="330" y="70" width="120" height="210" fill="#1f4c45" opacity="0.92" rx="10" />
+                          <text x="210" y="300" text-anchor="middle" fill="rgba(16,35,29,0.75)" font-size="14">Premium</text>
+                          <text x="390" y="300" text-anchor="middle" fill="rgba(16,35,29,0.75)" font-size="14">Standard</text>
+                          <text x="10" y="160" transform="rotate(-90 10 160)" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Deckungsbeitrag pro Drink</text>
+                        </svg>
+                      </div>
+                    </article>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <span>Kennzahlen basieren auf dem aktuellen Optimierungszyklus. Anpassbar auf reale Bar-Performancedaten.</span>
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="fruehstueck-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="fruehstueck-modal-title">
+      <header class="modal-header">
+        <div>
+          <p data-modal-kicker>Optimierungsprozesse · Frühstück</p>
+          <h3 id="fruehstueck-modal-title" data-modal-title>Point of Control: Externe Gäste zuverlässig erfassen</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 2" aria-current="false" data-modal-dot="1"></button>
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 3" aria-current="false" data-modal-dot="2"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Frühstück" data-modal-title="Point of Control: Externe Gäste zuverlässig erfassen">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid"><article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                  </svg>
+                  Status Quo
+                </h4>
+                <ul>
+                  <li>Externe Gäste können ab 10:00 Uhr frühstücken (Hausgäste haben Vorrang).</li>
+                  <li>Kapazität: 94 Plätze, Peaks bis ~200 Pax (v. a. Sa/So, Hauptsaison).</li>
+                  <li>Ohne klaren Eintrittsprozess wird in der Hektik darauf vertraut, dass externe Gäste am Ende aktiv bezahlen.</li>
+                </ul>
+              </article>
+              <article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                    <path d="M5 15h14" />
+                  </svg>
+                  Flaschenhälse
+                </h4>
+                <ul>
+                  <li>Kein verlässlicher Überblick, wie viele externe Gäste tatsächlich eintreten und bezahlt haben.</li>
+                  <li>In Spitzenlast können Externe ohne Zahlung „mitlaufen“ (Vergessen, Unklarheit, bewusster Diebstahl).</li>
+                  <li>Keine klare Zutritts- &amp; Platzierungslogik bei Vollauslastung (94 Plätze) &ndash; Hausgäste-Vorrang wird operativ schwer steuerbar.</li>
+                </ul>
+              </article>
+              <article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                  </svg>
+                  Exzellenz-Lösung
+                </h4>
+                <ul>
+                  <li>Point of Control am Eingang: Externe warten am Schild „Bitte warten – Sie werden platziert“ (ab 10:00 Uhr).</li>
+                  <li>Batch-Prozess: PoC sammelt 2–4 Externe, begleitet zur Bar/Kasse im Gastraum, Vorkasse im Kassensystem (Bon).</li>
+                  <li>Direkt im Anschluss: PoC platziert die Gruppe nach Verfügbarkeit (Hausgäste zuerst) und kehrt an den Eingang zurück.</li>
+                </ul>
+              </article>
+              <article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 17l4-4 3 3 7-7" />
+                    <path d="M19 7h-4V3" />
+                  </svg>
+                  Impact &amp; KPI
+                </h4>
+                <ul>
+                  <li>Umsatzsicherung: Externe werden vor Platzierung kassiert (Bon) &ndash; Schwund durch „nicht bezahlte Eintritte“ wird minimiert.</li>
+                  <li>Zielbild: Mehrumsatz durch externe Bons bei gleichbleibenden Lohnkosten &ndash; PoC wird aus freigesetzter Arbeitszeit (Optimierungen) besetzt, nicht durch zusätzliche Schichten.</li>
+                  <li>Externe Gäste sind eine deckungsbeitragsstarke Einnahmequelle (Umsatz &ndash; Wareneinsatz) &ndash; Messbarkeit ist Voraussetzung, um Ausbau/Bewerbung sauber zu steuern.</li>
+                  <li>Kapazitätssteuerung: 94 Plätze werden aktiv gemanagt (Hausgäste-Vorrang bleibt auch in Peaks stabil).</li>
+                  <li>KPI: Abweichung „Externe Covers/platziert vs. Bons“ (Ziel: 0) + Wartezeit Externe (Peak-Steuerung).</li>
+                </ul>
+              </article>
+                </div>
+              </div>
+
+              <article class="dashboard-module" aria-label="Point of Control Visualisierung">
+                <div class="chart-header">
+                  <h3>Point of Control &ndash; Wirkung im Vergleich</h3>
+                  <p>Vorher/Nachher: Leakage vermeiden, Hausgäste-Vorrang sichern, Kapazität steuern.</p>
+                </div>
+
+                <div class="dashboard-grid" role="group" aria-label="Point of Control Vergleich: ohne vs. mit PoC">
+                  <article class="chart-card">
+                    <div class="chart-header">
+                      <h3>Ohne PoC</h3>
+                      <p>Leakage-Risiko: Eintritt unkontrolliert, Zahlung nicht gesichert, Hausgäste-Vorrang schwer steuerbar.</p>
+                    </div>
+                    <ul>
+                      <li>Eintritt in Peaks unkontrolliert &ndash; Externe mischen sich unter Hausgäste.</li>
+                      <li>Zahlung passiert „irgendwann“ &ndash; in der Hektik wird sie vergessen oder umgangen.</li>
+                      <li>Plätze (94) laufen voll &ndash; Hausgäste-Vorrang ist operativ schwer durchzusetzen.</li>
+                    </ul>
+                  </article>
+
+                  <article class="chart-card">
+                    <div class="chart-header">
+                      <h3>Mit PoC</h3>
+                      <p>Gate + Vorkasse: Eintritt wird aktiv gesteuert, Zahlung erfolgt vor Platzierung, Auslastung bleibt kontrolliert.</p>
+                    </div>
+                    <ul>
+                      <li>PoC stoppt Externe ab 10:00 &ndash; warten am Schild „Bitte warten – Sie werden platziert“.</li>
+                      <li>Batch 2–4 Externe zur Bar/Kasse &ndash; Vorkasse im Kassensystem (Bon).</li>
+                      <li>Direkt platzieren nach Verfügbarkeit &ndash; Hausgäste zuerst, Auslastung bleibt kontrolliert.</li>
+                    </ul>
+                  </article>
+
+                  <article class="chart-card" aria-label="Point of Control KPIs">
+                    <div class="chart-header">
+                      <h3>Impact &amp; KPI</h3>
+                      <p>Kontrolle + Kapazitätssteuerung als Standard &ndash; messbar im Tagesgeschäft.</p>
+                    </div>
+                    <ul>
+                      <li>94 Plätze: aktive Steuerung statt „Überlaufen“.</li>
+                      <li>~200 Pax: Peak-Resilienz Sa/So &amp; Saison.</li>
+                      <li>Kontrollziel: „platziert“ = „Bon“ (Abweichung 0).</li>
+                    </ul>
+                  </article>
+                </div>
+
+                <div class="bar-dashboard-segment">
+                  <p class="segment-label">Leakage-Stopper</p>
+                  <div class="dashboard-grid" role="group" aria-label="Leakage-Stopper: Messbarkeit und Steuerung">
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Leakage-Stopper · Messbarkeit</h3>
+                        <p>Bis dato: nicht gemessen. Mit PoC wird die Abweichung „Externe Covers/platziert vs. Bons“ täglich sichtbar &ndash; Grundlage für Mehrumsatz ohne Mehrkosten.</p>
+                      </div>
+                      <div class="chart-legend">
+                        <div class="legend-item">
+                          <span class="legend-swatch baseline"></span>
+                          <span>Ohne PoC</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-swatch optimized"></span>
+                          <span>Mit PoC</span>
+                        </div>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 600 320" role="img" aria-labelledby="poc-chart-title poc-chart-desc">
+                          <title id="poc-chart-title">Leakage-Abweichung im Vergleich</title>
+                          <desc id="poc-chart-desc">Zwei Balken vergleichen eine beispielhafte Abweichung zwischen externen Covers und Bons ohne PoC versus mit PoC. Bis dato wurde diese Abweichung nicht systematisch gemessen.</desc>
+                          <defs>
+                            <linearGradient id="grid-gradient-poc" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="520" height="260" fill="url(#grid-gradient-poc)" stroke="rgba(16,35,29,0.1)" />
+                          <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                            <line x1="40" y1="80" x2="560" y2="80" />
+                            <line x1="40" y1="140" x2="560" y2="140" />
+                            <line x1="40" y1="200" x2="560" y2="200" />
+                            <line x1="40" y1="260" x2="560" y2="260" />
+                          </g>
+                          <line x1="40" y1="280" x2="560" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                          <line x1="40" y1="20" x2="40" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                          <rect x="150" y="90" width="120" height="190" fill="#b8554a" opacity="0.9" rx="10" />
+                          <rect x="330" y="270" width="120" height="10" fill="#1f4c45" opacity="0.92" rx="10" />
+                          <text x="210" y="300" text-anchor="middle" fill="rgba(16,35,29,0.75)" font-size="14">Ohne PoC</text>
+                          <text x="390" y="300" text-anchor="middle" fill="rgba(16,35,29,0.75)" font-size="14">Mit PoC</text>
+                          <text x="10" y="160" transform="rotate(-90 10 160)" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Abweichung (%)</text>
+                          <text x="270" y="70" text-anchor="middle" fill="#b8554a" font-size="12">z.B. 12 %</text>
+                          <text x="450" y="260" text-anchor="middle" fill="#1f4c45" font-size="12">Ziel: 0 %</text>
+                        </svg>
+                      </div>
+                    </article>
+
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Leakage-Stopper · Steuerung</h3>
+                        <p>Erst Messbarkeit schafft Steuerung: PoC-Besetzung, Batch-Größe und Gate-Disziplin werden anhand der Abweichung geführt.</p>
+                      </div>
+                      <ul>
+                        <li>Trigger: Abweichung &gt; 0 = Sofort-Check „Covers/platziert“ vs. Bons (Kasse).</li>
+                        <li>Peak-Regel: Hausgäste zuerst; Externe nur über PoC-Gate (keine Ausnahmen im Rush).</li>
+                        <li>Kapazitätslogik: Bei Vollauslastung (94 Plätze) Stop/Wait &ndash; keine „Durchläufer“.</li>
+                      </ul>
+                    </article>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Frühstück" data-modal-title="Rücklauf-Logistik im Peak: Servicewagen + Barspülmaschine">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid"><article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                  </svg>
+                  Status Quo
+                </h4>
+                <ul>
+                  <li>In Peak-Zeiten bringen Servicekräfte Teller und Tassen häufig einzeln zur Spülküche &ndash; der Laufweg ist hoch und wiederholt sich ständig.</li>
+                  <li>Tassen laufen nicht konsequent über die Barspülmaschine, obwohl sie nur ca. 1,5 m entfernt ist.</li>
+                  <li>Ohne klare Bereiche/Zonen kreuzen sich Servicewege im Gastraum &ndash; es entsteht unnötiges „Kreuz-und-quer“.</li>
+                </ul>
+              </article>
+              <article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                    <path d="M5 15h14" />
+                  </svg>
+                  Flaschenhälse
+                </h4>
+                <ul>
+                  <li>Extrem viele unnötige Meter pro Stunde &ndash; Zeit geht vom Gastkontakt und von aktiven Sales-/Service-Momenten ab.</li>
+                  <li>Spülküche wird zum Engpass, weil Teller und Tassen gleichzeitig (und in kleinen Mengen) ankommen.</li>
+                  <li>Unklare Zuständigkeiten/Wege: mehrere Mitarbeiter laufen dieselbe Strecke, statt Rücklauf zu bündeln.</li>
+                </ul>
+              </article>
+              <article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                  </svg>
+                  Exzellenz-Lösung
+                </h4>
+                <ul>
+                  <li>Voraussetzung: Umstellung auf Bistroreiniger (statt Glasreiniger), damit Tassen in der Barspülmaschine effizient und hygienisch gereinigt werden können.</li>
+                  <li>Servicewagen als Zwischenstation im Gastraum: Sammelpunkt für Geschirr &ndash; Teller werden in Batches in die Spülküche gebracht (statt Einzeltransporte).</li>
+                  <li>Trennung der Rückläufe: Tassen konsequent in die Barspülmaschine (1,5 m), Teller gesammelt in die Spülküche.</li>
+                  <li>Service-Zonen/Laufwege-Standard: feste Bereiche je Servicekraft &ndash; weniger Kreuzwege, klarere Übergaben und ruhigere Peaks.</li>
+                </ul>
+              </article>
+              <article class="modal-section">
+                <h4>
+                  <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 17l4-4 3 3 7-7" />
+                    <path d="M19 7h-4V3" />
+                  </svg>
+                  Impact &amp; KPI
+                </h4>
+                <ul>
+                  <li>Mehr Zeit am Gast: Laufwege sinken, Servicekräfte bleiben präsenter im Gastraum &ndash; Qualität und Geschwindigkeit steigen.</li>
+                  <li>Entlastung der Spülküche im Peak: Tassen werden an der Bar abgearbeitet, Teller kommen gebündelt &ndash; weniger Rückstau.</li>
+                  <li>Enablement: Erst durch diese Entlastung wird die Bewerbung/Erweiterung des externen Frühstücks operativ skalierbar &ndash; bei stabiler Servicequalität und messbarem Ergebnis.</li>
+                  <li>KPI: „Trips“ zur Spülküche pro Stunde (Ziel: deutlich runter) + Clearing-Zeit pro Tisch + Peak-Rückstau-Minuten in der Spülküche.</li>
+                </ul>
+              </article>
+                </div>
+              </div>
+
+              <article class="dashboard-module" aria-label="Rücklauf-Logistik Visualisierung">
+                <div class="chart-header">
+                  <h3>Rücklauf-Logistik &ndash; Vorher/Nachher</h3>
+                  <p>Servicewagen im Gastraum bündelt Teller-Rücklauf; Tassen laufen direkt über die Barspülmaschine (1,5 m). Voraussetzung: Bistroreiniger statt Glasreiniger.</p>
+                </div>
+
+                <div class="dashboard-grid" role="group" aria-label="Vergleich: ohne vs. mit Zwischenstation und Barspülmaschine">
+                  <article class="chart-card">
+                    <div class="chart-header">
+                      <h3>Ohne Zwischenstation</h3>
+                      <p>Viele Wege &amp; unnötige Last in der Spülküche durch Einzeltransporte.</p>
+                    </div>
+                    <ul>
+                      <li>Teller &amp; Tassen werden einzeln zur Spülküche getragen.</li>
+                      <li>Servicekräfte kreuzen sich im Gastraum &ndash; unnötige Laufwege im Peak.</li>
+                      <li>Spülküche staut, weil alles gleichzeitig in kleinen Mengen ankommt.</li>
+                    </ul>
+                  </article>
+
+                  <article class="chart-card">
+                    <div class="chart-header">
+                      <h3>Mit Wagen + Barspülmaschine</h3>
+                      <p>Bündeln + Trennen: Teller gebündelt zur Spülküche, Tassen direkt zur Barspülmaschine (1,5 m).</p>
+                    </div>
+                    <ul>
+                      <li>Servicewagen im Gastraum als Sammelstation: Teller werden gebündelt.</li>
+                      <li>Tassen direkt in die Barspülmaschine &ndash; Spülküche wird entlastet.</li>
+                      <li>Service-Zonen reduzieren Kreuzwege &ndash; ruhigere Peaks, mehr Zeit am Gast.</li>
+                    </ul>
+                  </article>
+
+                  <article class="chart-card" aria-label="Rücklauf-Logistik KPIs">
+                    <div class="chart-header">
+                      <h3>Impact &amp; KPI</h3>
+                      <p>Effekt direkt messbar über Laufwege, Clearing und Spül-Backlog.</p>
+                    </div>
+                    <ul>
+                      <li>Weniger Trips: weniger Wege zur Spülküche pro Stunde.</li>
+                      <li>Mehr Präsenz: mehr Zeit am Gast im Peak.</li>
+                      <li>Weniger Stau: weniger Rückstau-Minuten in der Spülküche.</li>
+                    </ul>
+                  </article>
+
+                  <article class="chart-card">
+                    <div class="chart-header">
+                      <h3>Laufwege runter · Trips bündeln</h3>
+                      <p>Beispielhafte Visualisierung: Trips zur Spülküche pro Stunde vor/nach Zwischenstation.</p>
+                    </div>
+                    <div class="chart-legend">
+                      <div class="legend-item">
+                        <span class="legend-swatch baseline"></span>
+                        <span>Vorher</span>
+                      </div>
+                      <div class="legend-item">
+                        <span class="legend-swatch optimized"></span>
+                        <span>Nachher</span>
+                      </div>
+                    </div>
+                    <div class="chart-canvas">
+                      <svg viewBox="0 0 600 320" role="img" aria-labelledby="dish-chart-title dish-chart-desc">
+                        <title id="dish-chart-title">Trips zur Spülküche im Vergleich</title>
+                        <desc id="dish-chart-desc">Zwei Balken vergleichen beispielhafte Trips zur Spülküche pro Stunde vor der Zwischenstation und nach der Umstellung mit Servicewagen und Barspülmaschine.</desc>
+                        <defs>
+                          <linearGradient id="grid-gradient-dish" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#f2f7f4" />
+                          </linearGradient>
+                        </defs>
+                        <rect x="40" y="20" width="520" height="260" fill="url(#grid-gradient-dish)" stroke="rgba(16,35,29,0.1)" />
+                        <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                          <line x1="40" y1="80" x2="560" y2="80" />
+                          <line x1="40" y1="140" x2="560" y2="140" />
+                          <line x1="40" y1="200" x2="560" y2="200" />
+                          <line x1="40" y1="260" x2="560" y2="260" />
+                        </g>
+                        <line x1="40" y1="280" x2="560" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                        <line x1="40" y1="20" x2="40" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                        <rect x="150" y="70" width="120" height="210" fill="#b8554a" opacity="0.9" rx="10" />
+                        <rect x="330" y="160" width="120" height="120" fill="#1f4c45" opacity="0.92" rx="10" />
+                        <text x="210" y="300" text-anchor="middle" fill="rgba(16,35,29,0.75)" font-size="14">Vorher</text>
+                        <text x="390" y="300" text-anchor="middle" fill="rgba(16,35,29,0.75)" font-size="14">Nachher</text>
+                        <text x="10" y="160" transform="rotate(-90 10 160)" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Trips / Stunde</text>
+                        <text x="270" y="60" text-anchor="middle" fill="#b8554a" font-size="12">z.B. 12</text>
+                        <text x="450" y="150" text-anchor="middle" fill="#1f4c45" font-size="12">z.B. 4</text>
+                      </svg>
+                    </div>
+                  </article>
+                </div>
+              </article>
+            </div>
+
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Frühstück" data-modal-title="Peak-Arrest: Postendisziplin &amp; InCharge-Compliance">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid"><article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Status Quo
+                    </h4>
+                    <ul>
+                      <li>Fehlende Postendisziplin im Peak: Stationen werden verlassen („ich helfe nur kurz“), häufig ausgelöst durch alte Hasen.</li>
+                      <li>Dominoeffekt: Jeder rückt nach, macht irgendwas &ndash; aber Aufgaben werden nicht Ende-zu-Ende sauber abgeschlossen.</li>
+                      <li>Resultat: Stress, unruhiger Gastraum, und Clearing/Buffet kippen zuerst.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Flaschenhälse
+                    </h4>
+                    <ul>
+                      <li>Clearing reißt: Tische bleiben stehen, Wege werden länger, der Gastraum staut.</li>
+                      <li>Buffet wird „nach Gefühl“ bedient: Leerlauf/Überfüllung, unnötige Laufwege, Qualitätsabfall.</li>
+                      <li>Schlechtes Vorbild normalisiert Regelbruch &ndash; InCharge verliert Steuerbarkeit.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Exzellenz-Lösung
+                    </h4>
+                    <ul>
+                      <li>Peak-Arrest: Positionspflicht im Peak &ndash; Postenwechsel nur nach Freigabe durch InCharge.</li>
+                      <li>Gating/Ansagepflicht: „Ich verlasse Station X und übernehme Y für 10 Minuten“ &ndash; InCharge entscheidet Ja/Nein.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Impact &amp; KPI
+                    </h4>
+                    <ul>
+                      <li>Stabiler Peak: weniger Stress, klarere Zuständigkeiten und ruhigerer Gastraum trotz hoher Frequenz.</li>
+                      <li>Clearing-/Buffet-Qualität steigt, weil Aufgaben wieder Ende-zu-Ende abgeschlossen werden.</li>
+                      <li>KPI: Rollenwechsel pro Stunde (Ziel: niedrig) + Clearing-Backlog-Minuten + Buffet-Refill-Takt-Treue.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+
+              <article class="dashboard-module" aria-label="Peak-Arrest Visualisierung">
+                <div class="chart-header">
+                  <h3>Peak-Arrest &ndash; Wirkung im Vergleich</h3>
+                  <p>Beispielhafte Visualisierung: weniger Rollenwechsel und weniger Clearing-Backlog durch Positionspflicht + Gating.</p>
+                </div>
+
+                <div class="dashboard-grid" role="group" aria-label="Peak-Arrest Vergleich: ohne vs. mit Postendisziplin">
+                  <article class="chart-card">
+                    <div class="chart-header">
+                      <h3>Stress-Test · Prozess-Stabilität vs. Peak-Last</h3>
+                      <p>Vergleich der Stabilitätskurven ohne Peak-Arrest und mit Peak-Arrest.</p>
+                    </div>
+                    <div class="chart-legend">
+                      <div class="legend-item">
+                        <span class="legend-swatch baseline"></span>
+                        <span>Ohne Peak-Arrest</span>
+                      </div>
+                      <div class="legend-item">
+                        <span class="legend-swatch optimized"></span>
+                        <span>Mit Peak-Arrest</span>
+                      </div>
+                    </div>
+                    <div class="chart-canvas">
+                      <svg viewBox="0 0 600 320" role="img" aria-labelledby="peak-arrest-line-title peak-arrest-line-desc">
+                        <title id="peak-arrest-line-title">Prozess-Stabilität im Stresstest</title>
+                        <desc id="peak-arrest-line-desc">Zwei Kurven zeigen die Prozessstabilität bei steigender Peak-Last ohne Peak-Arrest versus mit Peak-Arrest.</desc>
+                        <defs>
+                          <linearGradient id="grid-gradient-peak-arrest" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#f2f7f4" />
+                          </linearGradient>
+                        </defs>
+                        <rect x="40" y="20" width="520" height="260" fill="url(#grid-gradient-peak-arrest)" stroke="rgba(16,35,29,0.1)" />
+                        <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                          <line x1="40" y1="80" x2="560" y2="80" />
+                          <line x1="40" y1="140" x2="560" y2="140" />
+                          <line x1="40" y1="200" x2="560" y2="200" />
+                          <line x1="40" y1="260" x2="560" y2="260" />
+                        </g>
+                        <line x1="40" y1="280" x2="560" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                        <line x1="40" y1="20" x2="40" y2="280" stroke="#0f1f19" stroke-width="1.4" />
+                        <path d="M40 90 C160 120 240 170 320 215 C400 250 480 270 560 280" fill="none" stroke="#b8554a" stroke-width="3" stroke-linecap="round" />
+                        <path d="M40 95 C160 100 240 110 320 120 C400 130 480 138 560 145" fill="none" stroke="#1f4c45" stroke-width="3" stroke-linecap="round" />
+                        <g fill="#b8554a">
+                          <circle cx="40" cy="90" r="5" />
+                          <circle cx="240" cy="170" r="5" />
+                          <circle cx="400" cy="250" r="5" />
+                          <circle cx="560" cy="280" r="5" />
+                        </g>
+                        <g fill="#1f4c45">
+                          <circle cx="40" cy="95" r="5" />
+                          <circle cx="240" cy="110" r="5" />
+                          <circle cx="400" cy="130" r="5" />
+                          <circle cx="560" cy="145" r="5" />
+                        </g>
+                        <text x="300" y="310" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Peak-Last (Covers / Frequenz)</text>
+                        <text x="10" y="160" transform="rotate(-90 10 160)" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Prozess-Stabilität</text>
+                        <text x="560" y="297" text-anchor="end" fill="#b8554a" font-size="12">Ohne Peak-Arrest</text>
+                        <text x="560" y="162" text-anchor="end" fill="#1f4c45" font-size="12">Mit Peak-Arrest</text>
+                      </svg>
+                    </div>
+                  </article>
+                </div>
+
+                <div class="bar-dashboard-segment">
+                  <p class="segment-label">Kausalitätskette</p>
+                  <article class="chart-card" aria-label="Wirkungskette: Postendisziplin bis PoC">
+                    <div class="chart-header">
+                      <h3>Wirkungskette: Mehrumsatz bei gleichbleibenden Lohnkosten</h3>
+                      <p>Optimierungen schaffen messbare Zeitfenster &ndash; der PoC-Posten wird ohne zusätzliche Lohnkosten besetzt und sichert Mehrumsatz.</p>
+                    </div>
+                    <div class="causal-timeline" role="group" aria-label="Kausalitätskette als Wirkungskette">
+                      <div class="causal-step">
+                        <h4 class="causal-title">1. Postendisziplin</h4>
+                        <p>Positionspflicht + Gating &rarr; weniger Rollenwechsel, weniger Rework.</p>
+                      </div>
+                      <div class="causal-step">
+                        <h4 class="causal-title">2. Laufwegeoptimierung</h4>
+                        <p>Rückläufe bündeln &rarr; Trips/h sinken, Kreuzwege verschwinden.</p>
+                      </div>
+                      <div class="causal-step">
+                        <h4 class="causal-title">3. Zeitgewinn</h4>
+                        <p>Messbares Zeitfenster entsteht genau in den Peak-Slots &ndash; ohne zusätzliche FTE.</p>
+                      </div>
+                      <div class="causal-step">
+                        <h4 class="causal-title">4. PoC-Posten</h4>
+                        <p>Gate + Vorkasse wird besetzbar &rarr; Leakage runter, externe Bons rauf.</p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <span>Messwerte lassen sich mit echten Buffet-Daten hinterlegen und in das Reporting überführen.</span>
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="rezeption-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="rezeption-modal-title">
+      <header class="modal-header">
+        <div>
+          <p data-modal-kicker>Optimierungsprozesse · Rezeption</p>
+          <h3 id="rezeption-modal-title" data-modal-title>Night Audit insourcen: 22:30&ndash;06:30 ohne Dienstleistermarge</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 2" aria-current="false" data-modal-dot="1"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide bar-slide--stack" data-modal-slide data-modal-kicker="Optimierungsprozesse · Rezeption" data-modal-title="Night Audit insourcen: 22:30&ndash;06:30 ohne Dienstleistermarge">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+              <article class="modal-section">
+          <h4>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+            </svg>
+            Status Quo
+          </h4>
+          <ul>
+            <li>Night Audit ist aktuell an eine externe Firma vergeben (22:30&ndash;06:30) inkl. Gästeservice und Rundgängen.</li>
+            <li>Abdeckung 7 Nächte/Woche: Hauptkraft (5 Nächte) + 2 Aushilfen (teilen 2 Nächte; in Urlauben häufiger).</li>
+            <li>Zusatzkosten durch Nacht-/Feiertagszuschläge plus Dienstleisterstruktur (Marge, Overhead, Disposition).</li>
+          </ul>
+              </article>
+              <article class="modal-section">
+          <h4>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+              <path d="M5 15h14" />
+            </svg>
+            Flaschenhälse
+          </h4>
+          <ul>
+            <li>Fixkostenblock durch Dienstleister-Marge/Overhead &ndash; bei inhaltlich gleicher Leistung im Haus.</li>
+            <li>Steuerbarkeit eingeschränkt: Anpassungen an Standards/Eskalation laufen über extern statt über Teamführung im Haus.</li>
+            <li>Know-how und Verantwortung für Abrechnung/Kassenabschluss bleibt außerhalb (prozesskritisch).</li>
+          </ul>
+              </article>
+              <article class="modal-section">
+          <h4>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+            </svg>
+            Exzellenz-Lösung
+          </h4>
+          <ul>
+            <li>Insourcing durch Übernahme des bestehenden Nachtteams (Hauptkraft + 2 Aushilfen): gleiche Zeiten, gleiche Aufgaben, aber intern geführt.</li>
+            <li>Standardisierung: Night-Audit-Checkliste + Übergabeprotokoll (Abrechnung, offene Posten, Sonderfälle) an den Frühdienst.</li>
+            <li>Klare Eskalationslogik (Technik/Housekeeping/Management) + dokumentierte Rundgänge als feste Routine.</li>
+            <li>Zusatznutzen: Checkout-Vorbereitung bis 06:30 (Rechnungsprüfung + Stopper-Liste) für den Peak 07:00&ndash;09:00 + täglicher Gruppen-Pre-Check-in (Rooming List, Pre-Assign, Billing-Setup).</li>
+          </ul>
+              </article>
+              <article class="modal-section">
+          <h4>
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 17l4-4 3 3 7-7" />
+              <path d="M19 7h-4V3" />
+            </svg>
+            Impact &amp; KPI
+          </h4>
+          <ul>
+            <li>Direkte Einsparung durch Wegfall der Dienstleister-Marge bei gleichbleibender 7/7-Abdeckung (inkl. Feiertagszuschläge).</li>
+            <li>Entlastung der Tagescrew: vorbereitete Check-outs und Gruppen reduzieren Peak-Stress (07:00&ndash;09:00) und steigern Durchsatz am Morgen.</li>
+            <li>Benchmark Rheinland-Pfalz (240 h/Monat): extern ca. 27&ndash;37 &euro;/h vs. intern ca. 21&ndash;27 &euro;/h &rarr; Potenzial 0&ndash;3,8 Tsd. &euro;/Monat (realistisch ~1,9 Tsd. &euro;/Monat &asymp; 23 Tsd. &euro;/Jahr).</li>
+            <li>KPI (Soll): Dienstleisterrechnung vs. AG-Gesamtkosten + Audit fertig bis 06:15 (&ge;95%) + Checkout-Ready bis 06:30 (&ge;90%) + Gruppen-Ready bis 06:30 (100%) + Kassen-/Buchungsdifferenzen (Anzahl/&euro;) + Eskalationen/Nacht + vollständige Übergaben (&ge;95%).</li>
+          </ul>
+              </article>
+                </div>
+              </div>
+              <div class="bar-dashboard-segment">
+                <p class="segment-label">Benchmark</p>
+                <article class="dashboard-module">
+                  <div class="dashboard-header">
+                    <h2>Dienstleister vs. Insourcing</h2>
+                  </div>
+                  <div class="dashboard-grid dashboard-grid--single">
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Waterfall · Dienstleister vs. Insourcing (Benchmark)</h3>
+                        <p>240 h/Monat · extern Ø 32 &euro;/h vs. intern Ø 24 &euro;/h &rarr; ~1.920 &euro;/Monat Ersparnis.</p>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 620 320" role="img" aria-labelledby="na-waterfall-title na-waterfall-desc">
+                          <title id="na-waterfall-title">Waterfall: Dienstleister versus Insourcing</title>
+                          <desc id="na-waterfall-desc">Ein Waterfall zeigt die monatlichen Kosten extern, die Ersparnis sowie die resultierenden internen Arbeitgeberkosten im Benchmark.</desc>
+                          <defs>
+                            <linearGradient id="na-wf-bg" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="540" height="240" fill="url(#na-wf-bg)" stroke="rgba(16,35,29,0.1)" />
+                          <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                            <line x1="40" y1="80" x2="580" y2="80" />
+                            <line x1="40" y1="140" x2="580" y2="140" />
+                            <line x1="40" y1="200" x2="580" y2="200" />
+                          </g>
+                          <line x1="40" y1="260" x2="580" y2="260" stroke="#0f1f19" stroke-width="1.4" />
+
+                          <rect x="90" y="44" width="120" height="216" rx="14" fill="#b8554a" opacity="0.9" />
+                          <text x="150" y="282" text-anchor="middle" fill="#0f1f19" font-size="12">Dienstleister</text>
+                          <text x="150" y="40" text-anchor="middle" fill="#0f1f19" font-size="12">7.680 &euro;</text>
+
+                          <rect x="255" y="206" width="120" height="54" rx="14" fill="#1f4c45" opacity="0.92" />
+                          <text x="315" y="282" text-anchor="middle" fill="#0f1f19" font-size="12">Ersparnis</text>
+                          <text x="315" y="198" text-anchor="middle" fill="#0f1f19" font-size="12">-1.920 &euro;</text>
+
+                          <rect x="420" y="98" width="120" height="162" rx="14" fill="#1f4c45" opacity="0.78" />
+                          <text x="480" y="282" text-anchor="middle" fill="#0f1f19" font-size="12">AG-Kosten</text>
+                          <text x="480" y="92" text-anchor="middle" fill="#0f1f19" font-size="12">5.760 &euro;</text>
+
+                          <text x="310" y="312" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Monatliche Gesamtkosten (Benchmark)</text>
+                        </svg>
+                      </div>
+                    </article>
+                  </div>
+                </article>
+              </div>
+
+              <div class="bar-dashboard-segment">
+                <p class="segment-label">Morning Peak Readiness</p>
+                <article class="dashboard-module">
+                  <div class="dashboard-header">
+                    <h2>Peak 07:00&ndash;09:00 steuerbar machen</h2>
+                  </div>
+                  <div class="dashboard-grid dashboard-grid--single">
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Morning Peak Readiness · Sollsteuerung</h3>
+                        <p>Nacht bereitet Check-outs und Gruppen vor.</p>
+                      </div>
+                      <div class="kpi-gauges" role="group" aria-label="Morning Peak Readiness Sollwerte">
+                        <div class="kpi-gauge">
+                          <h4>Audit fertig</h4>
+                          <p>Soll: bis 06:15 (&ge;95%)</p>
+                          <div class="kpi-bar" aria-hidden="true"><span style="width:95%"></span></div>
+                        </div>
+                        <div class="kpi-gauge">
+                          <h4>Checkout-Ready</h4>
+                          <p>Soll: bis 06:30 (&ge;90%)</p>
+                          <div class="kpi-bar" aria-hidden="true"><span style="width:90%"></span></div>
+                        </div>
+                        <div class="kpi-gauge">
+                          <h4>Gruppen-Ready</h4>
+                          <p>Soll: bis 06:30 (100%)</p>
+                          <div class="kpi-bar" aria-hidden="true"><span style="width:100%"></span></div>
+                        </div>
+                      </div>
+                    </article>
+
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Checkouts pro Wochentag (Durchschnitt)</h3>
+                        <p>Fokus: Vorbereitung vor dem Peak 07:00&ndash;09:00.</p>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 620 320" role="img" aria-labelledby="na-co-title na-co-desc">
+                          <title id="na-co-title">Checkouts nach Wochentag</title>
+                          <desc id="na-co-desc">Balkendiagramm zeigt durchschnittliche Checkouts je Wochentag: Mo 20, Di 50, Mi 50, Do 80, Fr 50, Sa 35, So 95.</desc>
+                          <defs>
+                            <linearGradient id="na-co-bg" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="540" height="240" fill="url(#na-co-bg)" stroke="rgba(16,35,29,0.1)" />
+                          <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                            <line x1="40" y1="68" x2="580" y2="68" />
+                            <line x1="40" y1="116" x2="580" y2="116" />
+                            <line x1="40" y1="164" x2="580" y2="164" />
+                            <line x1="40" y1="212" x2="580" y2="212" />
+                          </g>
+                          <line x1="40" y1="260" x2="580" y2="260" stroke="#0f1f19" stroke-width="1.4" />
+                          <line x1="40" y1="20" x2="40" y2="260" stroke="#0f1f19" stroke-width="1.4" />
+
+                          <g fill="#1f4c45" opacity="0.86">
+                            <rect x="72" y="212" width="44" height="48" rx="10" />
+                            <rect x="140" y="140" width="44" height="120" rx="10" />
+                            <rect x="208" y="140" width="44" height="120" rx="10" />
+                            <rect x="276" y="68" width="44" height="192" rx="10" />
+                            <rect x="344" y="140" width="44" height="120" rx="10" />
+                            <rect x="412" y="176" width="44" height="84" rx="10" />
+                            <rect x="480" y="32" width="44" height="228" rx="10" />
+                          </g>
+
+                          <g fill="rgba(16,35,29,0.7)" font-size="12">
+                            <text x="94" y="282" text-anchor="middle">Mo</text>
+                            <text x="162" y="282" text-anchor="middle">Di</text>
+                            <text x="230" y="282" text-anchor="middle">Mi</text>
+                            <text x="298" y="282" text-anchor="middle">Do</text>
+                            <text x="366" y="282" text-anchor="middle">Fr</text>
+                            <text x="434" y="282" text-anchor="middle">Sa</text>
+                            <text x="502" y="282" text-anchor="middle">So</text>
+                          </g>
+
+                          <g fill="rgba(16,35,29,0.72)" font-size="12">
+                            <text x="94" y="206" text-anchor="middle">20</text>
+                            <text x="162" y="134" text-anchor="middle">50</text>
+                            <text x="230" y="134" text-anchor="middle">50</text>
+                            <text x="298" y="62" text-anchor="middle">80</text>
+                            <text x="366" y="134" text-anchor="middle">50</text>
+                            <text x="434" y="170" text-anchor="middle">35</text>
+                            <text x="502" y="26" text-anchor="middle">95</text>
+                          </g>
+
+                          <text x="310" y="312" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Check-outs (Durchschnitt je Wochentag)</text>
+                        </svg>
+                      </div>
+                    </article>
+                  </div>
+                </article>
+              </div>
+
+            </div>
+
+            <div class="bar-slide bar-slide--stack" data-modal-slide data-modal-kicker="Optimierungsprozesse · Rezeption" data-modal-title="Self-Check-in Counter: Business-Check-in ohne Wartezeit">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Status Quo
+                    </h4>
+                    <ul>
+                      <li>Zu Anreisezeiten entstehen Warteschlangen &ndash; besonders belastend für geschäftliche Stammgäste (Zeitdruck).</li>
+                      <li>Formale Schritte (Formular, Unterschrift, Datenerfassung, Kartenkodierung) binden die Rezeption stark im Frontbetrieb.</li>
+                      <li>Backoffice-Aufgaben (Korrespondenz, Rechnungs-/Debitorenklärung, Gästewünsche, Qualitätssicherung) werden in Peaks nach hinten geschoben.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Flaschenhälse
+                    </h4>
+                    <ul>
+                      <li>Der Check-in ist stark manuell: Daten prüfen/erfassen, Unterschrift einholen, Dokumentation &ndash; pro Gast wiederkehrend.</li>
+                      <li>Geschäftliche Stammgäste durchlaufen trotz „bekanntem Profil“ den gleichen formalen Ablauf &ndash; wenig Differenzierung nach Gäste-Value.</li>
+                      <li>Peaks erzeugen Druck: Wartezeiten steigen, Fehler-/Nacharbeit (fehlende Daten, Nachsignaturen) nimmt zu.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Exzellenz-Lösung
+                    </h4>
+                    <ul>
+                      <li>Self-Check-in Counter in der Lobby: Stammgäste/Business checken selbstständig ein (Daten bestätigen, digitale Signatur, Schlüsselkarte).</li>
+                      <li>Pre-Check-in vor Anreise (Link/QR): Ankunft wird zum „Abholen der Karte“ statt vollständigem Schalterprozess.</li>
+                      <li>Rezeption übernimmt Ausnahmen &amp; Service (Sonderwünsche, Probleme, persönliche Begrüßung), statt primär formale Datenerfassung.</li>
+                      <li>Marktstandard: Moderne Guest-Journey (wie bei vielen Ketten) &ndash; setzt ein klares Signal für Effizienz und Professionalität.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Impact &amp; KPI
+                    </h4>
+                    <ul>
+                      <li>Wartezeiten sinken, Business-Stammgäste sparen Zeit &ndash; schneller Start in den Aufenthalt.</li>
+                      <li>Gleichbleibende Lohnkosten: formale Minuten pro Check-in sinken &ndash; frei werdende Zeit fließt in Backoffice (Rechnungen, Gästewünsche, Qualität).</li>
+                      <li>Höhere Datenqualität &amp; Compliance: strukturierte Eingaben + digitale Signatur reduzieren Nacharbeit und sichern die Dokumentation.</li>
+                      <li>Steuerbarkeit: Anteil Self-Check-in (%) und Durchlaufzeit werden messbar &ndash; Peaks lassen sich datenbasiert managen.</li>
+                      <li>KPI: Median-/Peak-Wartezeit am Check-in + Anteil Self-Check-in (%) + Minuten pro Check-in (Frontdesk) + Backoffice-Throughput pro Schicht.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+
+              <div class="bar-dashboard-segment">
+                <p class="segment-label">Visualisierung</p>
+                <article class="dashboard-module">
+                  <div class="dashboard-header">
+                    <h2>Self-Check-in: Flow + Peak-Wirkung</h2>
+                  </div>
+                  <div class="dashboard-grid dashboard-grid--single">
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Flow · Heute vs. Self-Check-in</h3>
+                        <p>Standardfälle laufen über Pre-Check-in/Counter, der Desk übernimmt Ausnahmen &amp; Service.</p>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 620 340" role="img" aria-labelledby="sc-flow-title sc-flow-desc">
+                          <title id="sc-flow-title">Flow Vergleich: Heute versus Self-Check-in</title>
+                          <desc id="sc-flow-desc">Zwei Spalten zeigen den Check-in Ablauf heute und mit Self-Check-in Counter inklusive Pre-Check-in.</desc>
+                          <defs>
+                            <linearGradient id="sc-flow-bg" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="540" height="260" fill="url(#sc-flow-bg)" stroke="rgba(16,35,29,0.1)" />
+
+                          <text x="175" y="48" text-anchor="middle" fill="#0f1f19" font-size="14">Heute</text>
+                          <text x="445" y="48" text-anchor="middle" fill="#0f1f19" font-size="14">Mit Self-Check-in</text>
+
+                          <g fill="#ffffff" stroke="rgba(16,35,29,0.18)" stroke-width="1">
+                            <rect x="80" y="70" width="190" height="42" rx="12" />
+                            <rect x="80" y="122" width="190" height="42" rx="12" />
+                            <rect x="80" y="174" width="190" height="42" rx="12" />
+                            <rect x="80" y="226" width="190" height="42" rx="12" />
+
+                            <rect x="350" y="70" width="190" height="42" rx="12" />
+                            <rect x="350" y="122" width="190" height="42" rx="12" />
+                            <rect x="350" y="174" width="190" height="42" rx="12" />
+                            <rect x="350" y="226" width="190" height="42" rx="12" />
+                          </g>
+
+                          <g fill="rgba(16,35,29,0.82)" font-size="12">
+                            <text x="175" y="96" text-anchor="middle">Ankunft &amp; Schlange</text>
+                            <text x="175" y="148" text-anchor="middle">Daten/Unterschrift</text>
+                            <text x="175" y="200" text-anchor="middle">Karte codieren</text>
+                            <text x="175" y="252" text-anchor="middle">Ausgabe &amp; Fragen</text>
+
+                            <text x="445" y="96" text-anchor="middle">Pre-Check-in (Link/QR)</text>
+                            <text x="445" y="148" text-anchor="middle">Ankunft: Karte abholen</text>
+                            <text x="445" y="200" text-anchor="middle">Desk: Ausnahmen &amp; Service</text>
+                            <text x="445" y="252" text-anchor="middle">Check-in in Minuten</text>
+                          </g>
+
+                          <g stroke="rgba(16,35,29,0.35)" stroke-width="2" stroke-linecap="round">
+                            <line x1="175" y1="112" x2="175" y2="122" />
+                            <line x1="175" y1="164" x2="175" y2="174" />
+                            <line x1="175" y1="216" x2="175" y2="226" />
+
+                            <line x1="445" y1="112" x2="445" y2="122" />
+                            <line x1="445" y1="164" x2="445" y2="174" />
+                            <line x1="445" y1="216" x2="445" y2="226" />
+                          </g>
+
+                          <text x="310" y="316" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Standardfälle &rarr; Self-Check-in / Desk &rarr; Exceptions</text>
+                        </svg>
+                      </div>
+                    </article>
+
+                    <article class="chart-card">
+                      <div class="chart-header">
+                        <h3>Peak-Wartezeit · Vorher/Nachher</h3>
+                        <p>Self-Check-in reduziert Spitzen und glättet den Anreise-Peak.</p>
+                      </div>
+                      <div class="chart-legend">
+                        <div class="legend-item">
+                          <span class="legend-swatch baseline"></span>
+                          <span>Ohne Self-Check-in</span>
+                        </div>
+                        <div class="legend-item">
+                          <span class="legend-swatch optimized"></span>
+                          <span>Mit Self-Check-in</span>
+                        </div>
+                      </div>
+                      <div class="chart-canvas">
+                        <svg viewBox="0 0 620 320" role="img" aria-labelledby="sc-queue-title sc-queue-desc">
+                          <title id="sc-queue-title">Wartezeitkurve im Peak: ohne versus mit Self-Check-in</title>
+                          <desc id="sc-queue-desc">Zwei Kurven zeigen die Wartezeitentwicklung über ein Anreise-Zeitfenster, ohne und mit Self-Check-in.</desc>
+                          <defs>
+                            <linearGradient id="sc-queue-bg" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stop-color="#ffffff" />
+                              <stop offset="100%" stop-color="#f2f7f4" />
+                            </linearGradient>
+                          </defs>
+                          <rect x="40" y="20" width="540" height="240" fill="url(#sc-queue-bg)" stroke="rgba(16,35,29,0.1)" />
+                          <g stroke="rgba(16,35,29,0.08)" stroke-width="1">
+                            <line x1="40" y1="80" x2="580" y2="80" />
+                            <line x1="40" y1="140" x2="580" y2="140" />
+                            <line x1="40" y1="200" x2="580" y2="200" />
+                          </g>
+                          <line x1="40" y1="260" x2="580" y2="260" stroke="#0f1f19" stroke-width="1.4" />
+                          <line x1="40" y1="20" x2="40" y2="260" stroke="#0f1f19" stroke-width="1.4" />
+
+                          <path d="M40 240 C140 200 220 110 310 60 C380 40 470 85 580 150" fill="none" stroke="#b8554a" stroke-width="3" stroke-linecap="round" />
+                          <path d="M40 245 C140 225 220 170 310 140 C400 120 490 140 580 170" fill="none" stroke="#1f4c45" stroke-width="3" stroke-linecap="round" />
+
+                          <text x="310" y="312" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Anreise-Peak (Vorher/Nachher)</text>
+                          <text x="10" y="140" transform="rotate(-90 10 140)" text-anchor="middle" fill="rgba(16,35,29,0.7)" font-size="14">Wartezeit</text>
+                        </svg>
+                      </div>
+                    </article>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <span>Die Datenpunkte können mit CRM- und PMS-Kennzahlen verknüpft werden.</span>
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="technik-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="technik-modal-title">
+      <header class="modal-header">
+        <div>
+          <p data-modal-kicker>Optimierungsprozesse · Technik</p>
+          <h3 id="technik-modal-title" data-modal-title>Work in Progress</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Technik" data-modal-title="Work in Progress">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Work in Progress
+                    </h4>
+                    <ul>
+                      <li>Inhalte folgen nach Prozessbesprechung mit der Haustechnik (Ist-Ablauf + Engpässe).</li>
+                      <li>Danach ergänzen wir: Status Quo, Flaschenhälse, Exzellenz-Lösung sowie Impact &amp; KPI.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="housekeeping-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="housekeeping-modal-title">
+      <header class="modal-header">
+        <div>
+          <p data-modal-kicker>Optimierungsprozesse · Housekeeping</p>
+          <h3 id="housekeeping-modal-title" data-modal-title>Work in Progress</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide" data-modal-slide data-modal-kicker="Optimierungsprozesse · Housekeeping" data-modal-title="Work in Progress">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Work in Progress
+                    </h4>
+                    <ul>
+                      <li>Inhalte folgen nach Prozessbesprechung mit der Hausdame (Ist-Ablauf + Engpässe).</li>
+                      <li>Danach ergänzen wir: Status Quo, Flaschenhälse, Exzellenz-Lösung sowie Impact &amp; KPI.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="logistik-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="logistik-modal-title">
+      <header class="modal-header">
+        <div>
+          <p data-modal-kicker>Optimierungsprozesse · Logistik</p>
+          <h3 id="logistik-modal-title" data-modal-title>Dienstwagen: Logistik &amp; Beschaffung</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 2" aria-current="false" data-modal-dot="1"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide bar-slide--stack" data-modal-slide data-modal-kicker="Optimierungsprozesse · Logistik" data-modal-title="Dienstwagen: Logistik &amp; Beschaffung">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Status Quo
+                    </h4>
+                    <ul>
+                      <li>Beschaffung (Metro, Getränke, Baumarkt) ist abhängig von Lieferfenstern, Mindestbestellwerten und Lieferkosten.</li>
+                      <li>Leergut belegt Lagerfläche und wird nicht flexibel abtransportiert.</li>
+                      <li>Reparaturen/Schweißarbeiten (z.B. Barhocker) haben unnötige Wartezeit durch Abholung/Lieferung.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Flaschenhälse
+                    </h4>
+                    <ul>
+                      <li>Lieferkosten + Mindestbestellwerte treiben indirekt Kosten und binden Liquidität ("Füllbestellungen").</li>
+                      <li>Leergut/Entsorgung wird teuer oder blockiert operativ (Lagerüberfüllung).</li>
+                      <li>Fehlende kurzfristige Beschaffungsoption führt zu improvisierten Lösungen im Betrieb.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Exzellenz-Lösung
+                    </h4>
+                    <ul>
+                      <li>Leasing eines Hotel-Fahrzeugs als Arbeitsmittel (Beschaffung, Leergut, Reparaturfahrten).</li>
+                      <li>Klare Zuständigkeit und Fahrtenplanung: Einkauf/Leergut/Reparaturen werden gebündelt und priorisiert.</li>
+                      <li>Direkter Zugriff auf Angebote (Metro/Markt) ohne Mindestbestellwert-Druck.</li>
+                      <li>Da Ladestationen vorhanden sind: E-Auto als Betriebsfahrzeug (kurze Strecken, planbare Touren, geringe Betriebskosten).</li>
+                      <li>Auswahlkriterien: kleiner Lieferwagen/Hochdachkombi mit viel Ladevolumen (Getränke/Leergut), niedrige Ladekante, robust für häufiges Be-/Entladen (z.B. Ford/Mazda o.ä.).</li>
+                      <li>Da die Touren im Umkreis von &lt; 10 km liegen: Reichweite ist unkritisch, Fokus liegt auf Laderaum, Alltagstauglichkeit und schneller Lade-/Standzeit im Hotel.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Impact &amp; KPI
+                    </h4>
+                    <ul>
+                      <li>Einsparungen: reduzierte Lieferkosten, weniger Entsorgungs-/Sonderkosten, geringere Nacharbeit durch schnellere Reparaturen.</li>
+                      <li>Liquidität: weniger Kapitalbindung durch Mindestbestellwert-/Vorratskäufe.</li>
+                      <li>Kostenrahmen (Zielwert): 48 Monate / 15.000 km/Jahr / Sonderzahlung möglich &ndash; Leasingrate (nur Fahrzeug) idealerweise ≤ 500 € / Monat.</li>
+                      <li>Zusatznutzen: Fahrzeug als Werbefläche/Branding (z.B. für das Frühstück) &ndash; unterstützt mehr externe Gäste, da optimierte Prozesse zusätzliche Kapazität schaffen.</li>
+                      <li>KPI: Lieferkosten/Monat, Leergutbestand (Stellplätze), Reparatur-Durchlaufzeit, Fahrten/Monat (Zweck), Einkaufsvolumen in Aktionen.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+
+            <div class="bar-slide bar-slide--stack" data-modal-slide data-modal-kicker="Optimierungsprozesse · Logistik" data-modal-title="Umsetzung &amp; Governance">
+              <div class="bar-process-segment">
+                <p class="segment-label">Rahmenbedingungen</p>
+                <div class="bar-process-grid">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Rolle &amp; Ownership
+                    </h4>
+                    <ul>
+                      <li>Zentrale Verantwortung: Besorgungen, Leergut-Abfahrten und Reparaturfahrten werden gebündelt durchgeführt.</li>
+                      <li>Fahrzeug ist Arbeitsmittel und "mobiles Büro" für Logistik-Aufgaben.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Verfügbarkeit
+                    </h4>
+                    <ul>
+                      <li>Klare Regelung zu Schlüssel/Planung, damit Fahrten schnell und zuverlässig möglich sind.</li>
+                      <li>Priorität: Betriebskritische Fahrten (Einkauf/Leergut/Reparatur) gehen vor.</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Einsatzplanung
+                    </h4>
+                    <ul>
+                      <li>Fixe Touren: Montag und Mittwoch (Metro/Getränke/Baumarkt) &ndash; inkl. Leergut-Abfahrt und geplanten Abhol-/Bringfahrten.</li>
+                      <li>Reparaturen bündeln: z.B. Barhocker/Metallbauer werden nach Möglichkeit in die Tour integriert (bringen/abholen).</li>
+                      <li>Ad-hoc-Fahrten nur für betriebskritische Fälle (z.B. Ausfall, Notbestand, kurzfristige Reparatur).</li>
+                    </ul>
+                  </article>
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Governance
+                    </h4>
+                    <ul>
+                      <li>Laden/Tanken: Nach jeder Tour ans Hotel-Ladegerät (Zielwert z.B. 70&ndash;90 %), damit das Fahrzeug jederzeit einsatzbereit ist.</li>
+                      <li>Kosten: Laden/Tanken läuft über einen definierten Prozess (z.B. Ladekarte/Beleg) &ndash; Abstimmung/Verantwortung über die Haustechnik &ndash; und wird einem Kostenstellen-Tracking zugeordnet.</li>
+                      <li>Reinigung: Nach jeder Fahrt Müll/Leergutreste entfernen; 1x pro Woche Außenwäsche/Innenreinigung (fixer Termin), keine Lagerung von leeren Kisten im Fahrzeug.</li>
+                      <li>Schäden: Sofort Foto + kurze Meldung (Zeit/Ort/Schaden) an die Haustechnik; Eintrag im Fahrten-Log, damit Versicherung/Leasing sauber bedient wird.</li>
+                      <li>Haftung: Verkehrsverstöße trägt der Fahrer; bei Schäden gelten interne Regeln (z.B. grobe Fahrlässigkeit vs. normaler Betrieb) und die Versicherungs-/Leasingbedingungen.</li>
+                      <li>Einfaches Fahrten-Log (Zweck/km) für Transparenz und Steuerbarkeit.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="modal" id="kultur-modal" role="presentation" aria-hidden="true">
+    <div class="modal-backdrop" data-modal-dismiss></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="kultur-modal-title">
+      <header class="modal-header">
+        <div>
+          <p data-modal-kicker>Initiativen · Kultur</p>
+          <h3 id="kultur-modal-title" data-modal-title>§ Kultur &amp; Mitarbeiterbindung</h3>
+          <div class="modal-slider-controls" aria-label="Prozess-Slides Navigation" data-modal-controls>
+            <div class="modal-slider-buttons">
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-prev aria-label="Vorherige Slide">Zurück</button>
+              <div class="modal-slider-dots" role="tablist" aria-label="Slide Auswahl">
+                <button class="bar-dot modal-dot" type="button" role="tab" aria-label="Slide 1" aria-current="true" data-modal-dot="0"></button>
+              </div>
+              <button class="bar-slider-button modal-slider-button" type="button" data-modal-next aria-label="Nächste Slide">Weiter</button>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" type="button" data-modal-dismiss aria-label="Exit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 6l12 12M6 18L18 6" />
+          </svg>
+        </button>
+      </header>
+      <section class="modal-body">
+        <div class="bar-slider" data-modal-slider>
+          <div class="bar-slider-track" data-modal-track>
+            <div class="bar-slide bar-slide--stack" data-modal-slide data-modal-kicker="Initiativen · Kultur" data-modal-title="§ Kultur &amp; Mitarbeiterbindung">
+              <div class="bar-process-segment">
+                <p class="segment-label">Prozessdetails</p>
+                <div class="bar-process-grid bar-process-grid--two-by-two">
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12h14M5 12l4 4m-4-4l4-4M12 5l4 4m-4-4l-4 4M12 19l4-4m-4 4l-4-4" />
+                      </svg>
+                      Status Quo (2025)
+                    </h4>
+                    <ul>
+                      <li>Identitätsstiftende Maßnahme (Weihnachtsfeier) wurde reduziert/gestrichen.</li>
+                      <li>Wertschätzung ist nicht systematisiert und hängt stark von einzelnen Personen/Schichten ab.</li>
+                      <li>Folge: sinkendes "Wir-Gefühl" &ndash; besonders kritisch in einem 100-Zimmer-Haus mit Peak-Belastung.</li>
+                    </ul>
+                  </article>
+
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3v5l3 3-3 3v7m0-7l-3 3 3 3" />
+                        <path d="M5 15h14" />
+                      </svg>
+                      Flaschenhals
+                    </h4>
+                    <ul>
+                      <li>"Silent Quitting": Dienst nach Vorschrift statt proaktive Unterstützung im Team.</li>
+                      <li>Betriebstreue/Bindung sinkt, Fluktuation wird wahrscheinlicher &ndash; Know-how geht verloren.</li>
+                      <li>Operatives Risiko: instabile Servicequalität in Peaks (Frühstück, Check-in, Events).</li>
+                    </ul>
+                  </article>
+
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3l2.2 4.46 4.92.72-3.56 3.47.84 4.9L12 14.77l-4.4 2.31.84-4.9L4.88 8.18l4.92-.72L12 3z" />
+                      </svg>
+                      Exzellenz-Lösung (Plan 2026)
+                    </h4>
+                    <ul>
+                      <li>Einführung eines verbindlichen Wertschätzungskalenders (12 Monate) als Führungs- und Stabilitätsinstrument.</li>
+                      <li>Fixe Rituale: monatliches Gesamtmeeting, Sommerfest.</li>
+                      <li>Wertschätzung sichtbar machen: kleine Anerkennungen an klaren Kriterien (z.B. Gastfeedback, Teamhilfe, Prozessdisziplin).</li>
+                    </ul>
+                  </article>
+
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                        <path d="M8 2h8v4H8z" />
+                      </svg>
+                      Umsetzung &amp; Governance
+                    </h4>
+                    <ul>
+                      <li>Verantwortung: ein freiwilliger Kulturpate/Kümmerer (jemand, der das gerne macht) koordiniert &ndash; die Hotelleitung unterstützt und gibt den Rahmen.</li>
+                      <li>Monatliches Gesamtmeeting: fester Termin (z.B. 1. Dienstag im Monat) &ndash; kurz, verbindlich, mit Raum für Anerkennung und offene Punkte.</li>
+                      <li>Planung &amp; Feedback: Wertschätzungskalender wird sichtbar kommuniziert; im Meeting 3 kurze Fragen zur Teamstimmung (Skala 1&ndash;5) + 1 konkrete Maßnahme, die wirklich umgesetzt wird.</li>
+                    </ul>
+                  </article>
+
+                  <article class="modal-section">
+                    <h4>
+                      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 17l4-4 3 3 7-7" />
+                        <path d="M19 7h-4V3" />
+                      </svg>
+                      Impact &amp; KPI
+                    </h4>
+                    <ul>
+                      <li>Business Case: Fluktuationskosten senken (Richtwert: ca. 5&ndash;10 T€ pro verhinderter Kündigung &ndash; Recruiting/Onboarding/Überbrückung; ohne Produktivitätsverlust).</li>
+                      <li>KPI: Kündigungen/Quartal, Krankheitstage, Teamstimmung (Skala 1&ndash;5), Bewerber-Resonanz, Time-to-Fill, Trainingsquote Onboarding.</li>
+                    </ul>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-footer">
+        <button type="button" data-modal-dismiss>Schließen</button>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var triggers = document.querySelectorAll('[data-modal-target]');
+      var activeModal = null;
+      var lastTrigger = null;
+      var initialized = new Set();
+
+      var exportPdfButtonBottom = document.getElementById('export-pdf-bottom');
+      if (exportPdfButtonBottom) {
+        exportPdfButtonBottom.addEventListener('click', function () {
+          openPrintView();
+        });
+      }
+
+      triggers.forEach(function (trigger) {
+        var targetId = trigger.getAttribute('data-modal-target');
+        var modal = document.getElementById(targetId);
+        if (!modal) {
+          return;
+        }
+
+        if (!initialized.has(modal)) {
+          setupModal(modal);
+          initialized.add(modal);
+        }
+
+        trigger.addEventListener('click', function (event) {
+          event.preventDefault();
+          openModal(modal, trigger);
+        });
+
+        trigger.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openModal(modal, trigger);
+          }
+        });
+      });
+
+      function setupModal(modal) {
+        var modalCard = modal.querySelector('.modal-card');
+        var dismissElements = modal.querySelectorAll('[data-modal-dismiss]');
+
+        dismissElements.forEach(function (el) {
+          el.addEventListener('click', function () {
+            closeModal(modal);
+          });
+        });
+
+        modal.addEventListener('click', function (event) {
+          if (!modalCard.contains(event.target)) {
+            closeModal(modal);
+          }
+        });
+
+        modal.addEventListener('keydown', function (event) {
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            closeModal(modal);
+          }
+        });
+      }
+
+      function openModal(modal, trigger) {
+        if (activeModal) {
+          closeModal(activeModal);
+        }
+
+        activeModal = modal;
+        lastTrigger = trigger;
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+
+        var closeButton = modal.querySelector('.modal-close');
+        if (closeButton) {
+          closeButton.focus();
+        }
+
+        resetModalSlider(modal);
+      }
+
+      function closeModal(modal) {
+        if (!modal || modal.getAttribute('aria-hidden') === 'true') {
+          return;
+        }
+
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+
+        if (modal === activeModal) {
+          activeModal = null;
+        }
+
+        if (lastTrigger && document.body.contains(lastTrigger)) {
+          lastTrigger.focus();
+        }
+      }
+
+      function setupModalSlider(modal) {
+        var slider = modal.querySelector('[data-modal-slider]');
+        if (!slider) {
+          return null;
+        }
+
+        var track = slider.querySelector('[data-modal-track]');
+        var slides = slider.querySelectorAll('[data-modal-slide]');
+        var kicker = modal.querySelector('[data-modal-kicker]');
+        var title = modal.querySelector('[data-modal-title]');
+        var prev = modal.querySelector('[data-modal-prev]');
+        var next = modal.querySelector('[data-modal-next]');
+        var dots = modal.querySelectorAll('[data-modal-dot]');
+
+        if (!track || !slides.length) {
+          return null;
+        }
+
+        var state = { index: 0 };
+        modal.__sliderState = state;
+
+        function setSlider(index) {
+          var maxIndex = slides.length - 1;
+          state.index = Math.max(0, Math.min(index, maxIndex));
+          track.style.transform = 'translateX(' + state.index * -100 + '%)';
+
+          var activeSlide = slides[state.index];
+          if (activeSlide) {
+            var nextKicker = activeSlide.getAttribute('data-modal-kicker');
+            var nextTitle = activeSlide.getAttribute('data-modal-title');
+            if (kicker && nextKicker) {
+              kicker.textContent = nextKicker;
+            }
+            if (title && nextTitle) {
+              title.textContent = nextTitle;
+            }
+          }
+
+          dots.forEach(function (dot) {
+            var dotIndex = Number(dot.getAttribute('data-modal-dot'));
+            dot.setAttribute('aria-current', dotIndex === state.index ? 'true' : 'false');
+          });
+
+          if (prev) {
+            prev.disabled = state.index === 0;
+          }
+
+          if (next) {
+            next.disabled = state.index === maxIndex;
+          }
+        }
+
+        if (prev) {
+          prev.addEventListener('click', function () {
+            setSlider(state.index - 1);
+          });
+        }
+
+        if (next) {
+          next.addEventListener('click', function () {
+            setSlider(state.index + 1);
+          });
+        }
+
+        dots.forEach(function (dot) {
+          dot.addEventListener('click', function () {
+            setSlider(Number(dot.getAttribute('data-modal-dot')));
+          });
+        });
+
+        setSlider(0);
+        state.set = setSlider;
+        return state;
+      }
+
+      function resetModalSlider(modal) {
+        if (!modal) {
+          return;
+        }
+
+        var state = modal.__sliderState;
+        if (state && typeof state.set === 'function') {
+          state.set(0);
+          return;
+        }
+
+        setupModalSlider(modal);
+      }
+
+      function openPrintView() {
+        var modalOrder = ['rezeption-modal', 'fruehstueck-modal', 'bar-modal', 'technik-modal', 'housekeeping-modal', 'logistik-modal', 'kultur-modal'];
+        var styleTag = document.querySelector('style');
+        var baseCss = styleTag ? styleTag.innerHTML : '';
+        var fontLinks = Array.prototype.slice
+          .call(document.querySelectorAll('link[rel="preconnect"], link[href*="fonts.googleapis.com"], link[href*="fonts.gstatic.com"]'))
+          .map(function (link) {
+            return link.outerHTML;
+          })
+          .join('\n');
+
+        var printCss = '\n' +
+          '@page { margin: 12mm; }\n' +
+          'body { background: #ffffff !important; padding: 0 !important; }\n' +
+          '.deck { width: 100% !important; box-shadow: none !important; border: none !important; padding: 0 !important; background: transparent !important; }\n' +
+          '.print-root { display: grid; gap: 42px; }\n' +
+          '.print-section { page-break-inside: avoid; }\n' +
+          '.print-section + .print-section { page-break-before: always; }\n' +
+          '.print-kicker { margin: 0 0 6px; font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(16,35,29,0.62); }\n' +
+          '.print-title { margin: 0 0 18px; font-family: "Montserrat", sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }\n' +
+          '.header-actions, .export-button { display: none !important; }\n';
+
+        var w = window.open('', '_blank');
+        if (!w) {
+          window.print();
+          return;
+        }
+
+        w.document.open();
+        w.document.write(
+          '<!DOCTYPE html>' +
+            '<html lang="de">' +
+            '<head>' +
+              '<meta charset="UTF-8" />' +
+              '<meta name="viewport" content="width=device-width, initial-scale=1.0" />' +
+              fontLinks +
+              '<title>Dossier Export</title>' +
+              '<style>' + baseCss + printCss + '</style>' +
+            '</head>' +
+            '<body>' +
+              '<article class="deck">' +
+                '<div class="print-root" id="print-root"></div>' +
+              '</article>' +
+              '<script>window.addEventListener("load", function () { setTimeout(function () { window.print(); }, 350); });<\/script>' +
+            '</body>' +
+            '</html>'
+        );
+        w.document.close();
+
+        var root = w.document.getElementById('print-root');
+        if (!root) {
+          return;
+        }
+
+        var headerSection = w.document.createElement('section');
+        headerSection.className = 'print-section';
+
+        var h1 = document.querySelector('.brand-copy h1');
+        var subtitle = document.querySelector('.brand-subtitle');
+        var author = document.querySelector('.brand-author');
+
+        var headerTitle = w.document.createElement('h1');
+        headerTitle.className = 'print-title';
+        headerTitle.textContent = h1 ? h1.textContent : 'Dossier';
+        headerSection.appendChild(headerTitle);
+
+        if (subtitle) {
+          var sub = w.document.createElement('p');
+          sub.className = 'brand-subtitle';
+          sub.textContent = subtitle.textContent;
+          headerSection.appendChild(sub);
+        }
+
+        if (author) {
+          var auth = w.document.createElement('p');
+          auth.className = 'brand-author';
+          auth.textContent = author.textContent;
+          headerSection.appendChild(auth);
+        }
+
+        root.appendChild(headerSection);
+
+        modalOrder.forEach(function (modalId) {
+          var modal = document.getElementById(modalId);
+          if (!modal) {
+            return;
+          }
+
+          var slides = modal.querySelectorAll('[data-modal-slide]');
+          if (!slides.length) {
+            return;
+          }
+
+          var sectionEl = w.document.createElement('section');
+          sectionEl.className = 'print-section';
+
+          Array.prototype.slice.call(slides).forEach(function (slide, slideIndex) {
+            var kicker = slide.getAttribute('data-modal-kicker') || '';
+            var title = slide.getAttribute('data-modal-title') || '';
+
+            var kickerEl = w.document.createElement('p');
+            kickerEl.className = 'print-kicker';
+            kickerEl.textContent = kicker;
+            sectionEl.appendChild(kickerEl);
+
+            var titleEl = w.document.createElement('h2');
+            titleEl.className = 'print-title';
+            titleEl.textContent = title || modalId;
+            sectionEl.appendChild(titleEl);
+
+            var contentWrapper = w.document.createElement('div');
+            contentWrapper.className = 'bar-slide bar-slide--stack';
+
+            Array.prototype.slice.call(slide.children).forEach(function (child) {
+              contentWrapper.appendChild(child.cloneNode(true));
+            });
+
+            sectionEl.appendChild(contentWrapper);
+
+            if (slideIndex < slides.length - 1) {
+              var spacer = w.document.createElement('div');
+              spacer.style.height = '18px';
+              sectionEl.appendChild(spacer);
+            }
+          });
+
+          root.appendChild(sectionEl);
+        });
+      }
+
+      document.querySelectorAll('.modal').forEach(function (modal) {
+        setupModalSlider(modal);
+      });
+    })();
+  </script>
+</body>
+</html>
