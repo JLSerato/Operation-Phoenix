@@ -2981,8 +2981,13 @@
             var barBody = modal.querySelector('.modal-body--bar');
             var body = modal.querySelector('.modal-body');
             var card = modal.querySelector('.modal-card');
+            var isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent || '');
 
             function ensureSentinel(container) {
+              if (!isAndroid) {
+                return null;
+              }
+
               if (!container || typeof container.querySelector !== 'function') {
                 return null;
               }
