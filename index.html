@@ -2992,6 +2992,21 @@
               scrollContainers.push(card);
             }
 
+            try {
+              document.documentElement.scrollTop = 0;
+            } catch (e) {
+            }
+
+            try {
+              document.body.scrollTop = 0;
+            } catch (e) {
+            }
+
+            try {
+              window.scrollTo(0, 0);
+            } catch (e) {
+            }
+
             scrollContainers.forEach(function (container) {
               try {
                 container.scrollTop = 0;
@@ -3002,6 +3017,39 @@
                 return;
               }
             });
+
+            var activeSlide = slides[state.index];
+            var scanRoot = activeSlide || barBody || body;
+            if (scanRoot && typeof scanRoot.querySelectorAll === 'function') {
+              Array.prototype.slice.call(scanRoot.querySelectorAll('*')).forEach(function (el) {
+                try {
+                  if (!el || typeof el.scrollTop !== 'number') {
+                    return;
+                  }
+
+                  if (el.scrollHeight <= el.clientHeight + 1) {
+                    return;
+                  }
+
+                  var style = window.getComputedStyle(el);
+                  if (!style) {
+                    return;
+                  }
+
+                  var overflowY = style.overflowY;
+                  if (overflowY !== 'auto' && overflowY !== 'scroll') {
+                    return;
+                  }
+
+                  el.scrollTop = 0;
+                  if (typeof el.scrollTo === 'function') {
+                    el.scrollTo(0, 0);
+                  }
+                } catch (e) {
+                  return;
+                }
+              });
+            }
           }
 
           scrollToTop();
