@@ -758,6 +758,61 @@
       color: rgba(16, 35, 29, 0.6);
     }
 
+    .slide-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 12px 0 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 35, 29, 0.14);
+      background: rgba(255, 255, 255, 0.92);
+      color: rgba(16, 35, 29, 0.82);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .pill--now {
+      border-color: rgba(31, 76, 69, 0.26);
+      background: rgba(31, 76, 69, 0.08);
+      color: rgba(13, 45, 39, 0.92);
+    }
+
+    .pill--soon {
+      border-color: rgba(167, 117, 72, 0.28);
+      background: rgba(167, 117, 72, 0.12);
+      color: rgba(92, 56, 24, 0.92);
+    }
+
+    .pill--project {
+      border-color: rgba(108, 118, 132, 0.34);
+      background: rgba(108, 118, 132, 0.12);
+      color: rgba(36, 44, 56, 0.9);
+    }
+
+    .pill--strategic {
+      border-color: rgba(184, 85, 74, 0.32);
+      background: rgba(184, 85, 74, 0.1);
+      color: rgba(88, 30, 24, 0.92);
+    }
+
+    .pill--note {
+      text-transform: none;
+      letter-spacing: 0.02em;
+      white-space: normal;
+      line-height: 1.25;
+    }
+
     .bar-process-segment,
     .bar-dashboard-segment {
       display: grid;
@@ -1117,6 +1172,15 @@
       .modal-header .bar-dot {
         width: 9px;
         height: 9px;
+      }
+
+      .slide-badges {
+        gap: 8px;
+      }
+
+      .pill {
+        font-size: 0.74rem;
+        padding: 8px 10px;
       }
 
       .modal-body {
