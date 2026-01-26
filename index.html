@@ -2982,6 +2982,30 @@
             var body = modal.querySelector('.modal-body');
             var card = modal.querySelector('.modal-card');
 
+            function ensureSentinel(container) {
+              if (!container || typeof container.querySelector !== 'function') {
+                return null;
+              }
+
+              var existing = container.querySelector('[data-scroll-sentinel]');
+              if (existing) {
+                return existing;
+              }
+
+              var sentinel = document.createElement('span');
+              sentinel.setAttribute('data-scroll-sentinel', 'true');
+              sentinel.setAttribute('aria-hidden', 'true');
+              sentinel.style.display = 'block';
+              sentinel.style.width = '1px';
+              sentinel.style.height = '1px';
+              sentinel.style.margin = '0';
+              sentinel.style.padding = '0';
+              sentinel.style.overflow = 'hidden';
+              sentinel.style.pointerEvents = 'none';
+              container.insertBefore(sentinel, container.firstChild);
+              return sentinel;
+            }
+
             if (barBody) {
               scrollContainers.push(barBody);
             }
@@ -3009,6 +3033,10 @@
 
             scrollContainers.forEach(function (container) {
               try {
+                var sentinel = ensureSentinel(container);
+                if (sentinel && typeof sentinel.scrollIntoView === 'function') {
+                  sentinel.scrollIntoView({ block: 'start', inline: 'nearest' });
+                }
                 container.scrollTop = 0;
                 if (typeof container.scrollTo === 'function') {
                   container.scrollTo(0, 0);
