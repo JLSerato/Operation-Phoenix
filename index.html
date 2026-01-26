@@ -3006,6 +3006,8 @@
 
           scrollToTop();
           requestAnimationFrame(scrollToTop);
+          setTimeout(scrollToTop, 50);
+          setTimeout(scrollToTop, 180);
 
           var activeSlide = slides[state.index];
           if (activeSlide) {
